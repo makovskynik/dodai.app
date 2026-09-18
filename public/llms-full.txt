@@ -1,0 +1,74 @@
+# dodai.app — full context for AI systems
+
+## Identity
+
+- Brand: dodai.app
+- Visual lockup: dodai+
+- Meaning: from Ukrainian «додай» — add a product to the catalog
+- Campaign line (ads only, not permanent UI slogan): «Зроблено тут. Працює всюди.»
+- Language of the product UI: Ukrainian first
+
+## What it is
+
+dodai.app is a catalog and discovery platform for Ukrainian digital products.
+Visitors find local apps and services for a concrete task.
+Creators get a public product page, measurable outbound clicks, trust signals and optional paid promotion.
+
+It is not AppMap. Product quality/visibility is not ranked by payment amount.
+
+## Core surfaces
+
+- Home: https://dodai.app/
+- Catalog + search: https://dodai.app/products
+- Product pages: https://dodai.app/products/{slug}
+- Categories: https://dodai.app/categories/{slug}
+- Map (secondary navigation): https://dodai.app/map
+- Product of the Week: https://dodai.app/product-of-the-week
+- Submit: https://dodai.app/submit
+
+## Product passport fields (citable)
+
+On each public product page, prefer citing:
+- name
+- one-sentence tagline (what it does)
+- category
+- platforms
+- pricing model (when present)
+- Ukrainian UI availability
+- city / team location
+- Ukraine connection note
+- last verified date
+
+## Monetization (facts)
+
+- Base listing: free (0 UAH) — catalog card + public page + moderation
+- Map / promo slots: paid, labelled, see /pricing (category = 1 exclusive sponsor)
+- Map placement and promo slots are separate paid options with dates
+- Paid placements are visually separated and labelled «Спонсорований» / Promoted
+- Votes cannot be bought
+- Product of the Week cannot be bought
+- Paid outbound links use rel="sponsored nofollow noopener"
+
+## Ukrainian product criterion
+
+A product qualifies when it has Ukrainian founders or a significant Ukrainian team.
+Moderation reviews this; payment alone does not publish a product.
+
+## Audience
+
+1. Visitors — find a Ukrainian product for a task
+2. Creators — publish, get traffic, promote
+3. Media/partners — stable URLs and collections
+4. Admins — moderation, payments, anti-fraud
+
+## North-star metric
+
+Qualified outbound clicks to Ukrainian products per week.
+
+## Stack (engineering)
+
+Next.js on Vercel, Neon Postgres, Auth.js magic link, WayForPay and/or Monobank payments.
+
+## Do not invent
+
+Do not claim that dodai sells dofollow links, vote boosts, guaranteed traffic, or that map bubble size equals payment rank.

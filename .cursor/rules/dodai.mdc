@@ -1,0 +1,388 @@
+---
+description: Core engineering, product, UX and design-system rules for dodai.app
+globs:
+alwaysApply: true
+---
+
+# dodai.app — Cursor project rules
+
+These rules are mandatory for every change in the dodai.app codebase.
+Treat them as product and engineering constraints, not as optional suggestions.
+
+## 0. Source of truth and decision hierarchy
+
+Before writing code, inspect the repository and read the current project documents if they exist:
+
+- `docs/dodai-product-definition-v1.html` — product definition and business rules.
+- `docs/dodai-design-system-v1.html` — visual system and component rules.
+- `docs/dodai-app-product-and-implementation-plan.docx` — architecture and MVP boundaries.
+- `docs/adr/` — accepted architecture decisions.
+
+If paths differ, locate the equivalent files. Do not silently create a second source of truth.
+
+When documents conflict, use this order:
+
+1. Explicit user requirement in the current task.
+2. Accepted Architecture Decision Record (ADR).
+3. Product definition.
+4. Design system.
+5. Existing implementation.
+6. Cursor's own assumption.
+
+If a request conflicts with an invariant below, stop and explain the conflict before coding.
+Do not solve an ambiguous product decision by inventing a feature.
+
+## 1. Product invariants
+
+These rules must never be violated accidentally:
+
+- Product name: `dodai.app`. Brand shorthand: `dodai`. Visual lockup: `dodai+`.
+- dodai.app is a catalog and discovery platform for Ukrainian digital products.
+- The catalog/search experience is the main product. The map is context and secondary navigation.
+- A product is Ukrainian when it has Ukrainian founders or a significant Ukrainian team; this must be reviewable by moderation.
+- Basic placement is free (short card) or Passport at 300 UAH one-time (full passport). Paid options never buy organic rank or dofollow; outbound stays sponsored/nofollow.
+- Map placement and promotional placements are separate paid options.
+- Paid placement never changes organic votes or organic ranking.
+- `Product of the Week` cannot be bought. It is editorially selected and/or voted on under the documented launch rules.
+- Votes are independent of payment and cannot be sold, bundled or increased by a paid plan.
+- Comments are not part of MVP. Do not add a comments database table, UI or API unless the product decision explicitly reopens this.
+- Do not sell dofollow links. Paid outbound links must use `rel="sponsored nofollow noopener"`; user-generated links use `rel="ugc nofollow noopener"`.
+- Paid placements must be visually separated and explicitly labelled (`Promoted` or the approved Ukrainian equivalent).
+- The platform must remain useful without an outbound click: product description, platforms, pricing model, language, screenshots and update information belong on the public page.
+- Do not copy AppMap's code, database, design or money-based ranking. A product's visibility is not the same thing as product quality.
+
+## 2. Working mode for Cursor
+
+Before modifying code:
+
+1. Inspect the relevant directory, route, component and data flow.
+2. Identify the product rule, design token and API boundary affected.
+3. Write a short implementation plan in the response before making a non-trivial change.
+4. Reuse existing components and patterns before creating new ones.
+5. Keep the change narrow. Do not refactor unrelated code in the same task.
+
+After modifying code:
+
+1. Run the relevant type check, lint, unit tests and build checks.
+2. Test loading, empty, error, success, disabled and responsive states where applicable.
+3. Check keyboard navigation and visible focus.
+4. Report changed files, validation performed and any unresolved risk.
+
+Never claim a feature is complete when it was only mocked in the UI.
+Never hide a failing test, TypeScript error, migration issue or build warning.
+
+## 3. Architecture and boundaries
+
+Use the agreed stack unless a written ADR changes it (see `docs/adr/001-stack-vercel-neon.md`):
+
+- Next.js App Router and TypeScript.
+- Vercel deployment.
+- Neon Postgres with Drizzle ORM and server-side access patterns.
+- Auth.js magic-link authentication (Resend).
+- Vercel Blob for product media; Vercel Cron for scheduled jobs.
+- PaymentProvider adapter for WayForPay and/or Monobank.
+- PostHog and Google Analytics for product analytics where approved.
+- Zod (or the repository's approved validation library) at every external boundary.
+
+Keep boundaries explicit:
+
+- `app/` contains routes, layouts, metadata and route-level composition.
+- `components/ui/` contains reusable visual primitives only.
+- `components/domain/` contains reusable product components such as ProductCard, VoteControl and PlacementBadge.
+- `features/` contains user journeys such as catalog search, submit product, voting and placements.
+- `lib/` contains pure utilities, tokens, validation, analytics and shared types.
+- `server/` or route handlers contain database, payment and privileged operations.
+- UI components must not call the database directly unless the repository has an explicit approved client boundary.
+- Domain components must not contain payment, moderation or authorization decisions.
+- Server code must enforce every permission; hiding a button is not authorization.
+- Keep business logic out of JSX. Put it in named functions, services or domain modules that can be tested.
+- Do not introduce global state for data that belongs to a route or feature.
+- Prefer server components for read-only SEO content and client components only for interaction.
+- Keep client bundles small; do not make an entire page client-side to support one button.
+
+## 4. Component-first implementation
+
+The design system is the only approved source for interface decisions.
+
+Use existing primitives for:
+
+- Button, LinkButton, IconButton.
+- Input, SearchField, Select, Checkbox and FormField.
+- Card, ProductCard, ProductRow and ProductGrid.
+- Badge, StatusBadge, PlacementBadge and PlatformTag.
+- Modal, Drawer, Toast, Tooltip and ConfirmDialog.
+- EmptyState, ErrorState, Skeleton and Pagination.
+- VoteControl, CompactProductOfDay, MapMarker and MapLegend.
+
+If a needed primitive does not exist:
+
+1. Create it in the shared UI layer.
+2. Give it a clear API and documented states.
+3. Add a usage example or test.
+4. Compose it into the feature.
+
+Never duplicate a component by copying JSX into a second screen.
+Never create a one-off visual pattern when an existing component can be composed.
+Do not build a separate component for a single text wrapper or one-time layout unless it has a clear semantic role.
+
+Every interactive component must support:
+
+- default;
+- hover;
+- focus-visible;
+- pressed/active;
+- disabled;
+- loading;
+- error where relevant;
+- keyboard operation;
+- mobile layout.
+
+## 5. Design-system rules
+
+Use design tokens. Do not introduce arbitrary values in feature code.
+
+### Color
+
+Use semantic tokens, not raw hex values:
+
+- `ink`: `#141616`
+- `canvas`: `#F6F4EF`
+- `surface`: `#FFFDFA`
+- `copper`: `#C76B4C`
+- `copper-dark`: `#944B38`
+- product surfaces: `peach`, `mint`, `lilac`, `sky`
+- semantic colors: `success`, `warning`, `danger`, `info`
+
+Copper is the brand/action signal. Do not use it as the only indication of an error, success or payment status.
+Product surfaces provide context; they do not replace semantic states.
+
+### Typography
+
+- Use Geologica for headings, UI labels and product names.
+- Use IBM Plex Mono only for metadata, categories, IDs, dates and technical labels.
+- Do not introduce another font without an ADR.
+- Keep the established scale and line-height tokens.
+- Do not use all-caps for long user-facing copy.
+
+### Spacing, shape and elevation
+
+- Use the 8px spacing rhythm: 8, 12, 16, 24, 32, 48, 72.
+- Use 16px radius for standard cards and fields.
+- Use pill shapes only for actions, filters and status badges.
+- Use 1px borders for structure.
+- Use soft shadows sparingly; no glassmorphism, hard 3D cards or decorative gradients in every component.
+- Product cards must feel like product passports/index cards, not credit cards.
+
+### Logo
+
+- Primary lockup: `dodai` + copper add module.
+- Compact mark: `d+` only for favicon, app icon, map marker and very small UI surfaces.
+- Respect clear space equal to the height of the `+` module.
+- Never stretch, rotate, recolor, add shadows to or redraw the logo locally.
+- The `+` is a meaningful add action, not a random decoration.
+
+## 6. Product-card rules
+
+Every product card must answer these questions quickly:
+
+1. What is the product called?
+2. What problem does it solve?
+3. Who is it for or where does it work?
+4. What can I do next?
+
+Required structure:
+
+- product icon or approved fallback;
+- product name;
+- one-sentence value description;
+- category and platform metadata;
+- explicit action such as `Відкрити`;
+- vote control where voting is available;
+- commercial or editorial status badge when applicable.
+
+Rules:
+
+- Keep descriptions to one useful sentence; do not use vague marketing claims.
+- `Product of the Week` is an editorial badge and must never be shown on a paid placement.
+- `Promoted` is a commercial badge and must remain visible in every layout.
+- Organic lists and sponsored lists are separate data blocks, not one array sorted by payment.
+- Do not rank a product by the amount paid.
+- Do not use color alone to communicate product status.
+
+## 7. Search, catalog and map
+
+- Search is task-first: support product name, problem, category, platform and relevant tags.
+- Always implement loading, empty-result, error and clear-search states.
+- Record zero-result searches for future taxonomy work.
+- Filters must be URL-addressable and shareable.
+- Keep organic sorting separate from paid slots.
+- The map is an exploration layer, not the primary ranking.
+- Use clusters at scale; do not render hundreds of overlapping markers.
+- Map markers use compact `d+` for dodai context and product initials/logo for products.
+- Never make marker size or position depend on payment *amount* (no pay-more → bigger). Map sponsored slots may use one equal enlarged size (×3) vs organic, capped at 5 concurrent; size tiers by price are forbidden.
+- The map must have a list or accessible alternative view.
+
+## 8. Add-product flow
+
+The canonical flow is URL-first:
+
+1. Accept a website, App Store or Google Play URL without requiring registration.
+2. Fetch and preview title, description, Open Graph image, favicon and domain safely.
+3. Let the user correct metadata.
+4. Collect category, platforms, payment model, Ukrainian-language availability, city and Ukrainian connection.
+5. Collect owner email and send a magic link.
+6. Show free vs Passport (300 UAH) listing terms and optional paid placements from `/pricing`.
+7. Create a payment intent/order with an idempotency key.
+8. Confirm payment only through the provider webhook.
+9. Send the submission to moderation.
+10. Publish only after approval; otherwise record a reason and process the documented refund path.
+
+Do not allow a client-side success screen to activate a product, placement or badge.
+
+## 9. Payments, placements and moderation
+
+- Webhook confirmation is the only source of truth for paid status.
+- Every payment handler must be idempotent.
+- A paid slot is a time-bounded inventory record with `starts_at`, `ends_at`, surface and status.
+- Prevent overlapping reservations transactionally.
+- Product publication always passes moderation, including when payment succeeded.
+- Owners cannot edit moderation status, votes, awards, payment status or placement dates directly.
+- Store admin actions in an audit log.
+- Do not promise traffic, sales, rankings or dofollow SEO value in commercial copy.
+- Paid placements must state their duration and surface before payment.
+- Base placement has no automatic claim of `Verified`; verification requires a separate review process.
+
+## 10. Links, SEO, GEO and outbound tracking
+
+- Use an allowlist for outbound destinations and protect every redirect from open redirect attacks.
+- Preferred paid link attributes: `rel="sponsored nofollow noopener"`.
+- Preferred user-generated link attributes: `rel="ugc nofollow noopener"`.
+- Never create paid dofollow links.
+- Redirect endpoints must be `noindex` and disallowed from crawling where appropriate.
+- Public product pages are indexable only when active and moderated.
+- Implement canonical URL, title, description, Open Graph, sitemap, robots and BreadcrumbList.
+- Use SoftwareApplication or WebApplication structured data only when the page has the required facts.
+- Do not generate thin SEO pages for empty categories, unmoderated submissions or expired placements.
+- Track outbound clicks without sending private comments, nicknames or unnecessary personal data to analytics.
+- Follow `docs/adr/003-seo-geo-foundations.md`: keep `llms.txt`, citable product facts, AI crawler allowlist and GEO fields (`seoTitle`, `seoDescription`, `ukraineNote`, `lastVerifiedAt`, `sameAs`) in sync with public pages.
+- Filter query URLs on `/products` must be `noindex`; category pages index only with intro + enough products.
+- Do not invent GEO claims (guaranteed AI citations, sold dofollow, pay-to-rank).
+
+## 11. Data, validation and security
+
+- Validate all external input at the boundary with Zod or the approved validator.
+- Normalize domains and prevent duplicate active products by domain or store ID.
+- Sanitize and constrain user-provided text; never render raw HTML from submissions.
+- Accept only approved URL schemes and destinations.
+- Validate image MIME type, dimensions and size; strip EXIF where the pipeline supports it.
+- Use server-side authorization and database constraints; never trust a client role or hidden field.
+- Rate-limit submissions, votes, magic links and redirect events.
+- Use Turnstile or the approved anti-bot layer on public abuse-prone actions.
+- Keep secrets server-side and never expose service-role keys to the browser.
+- Use database migrations for schema changes. Do not edit production schema manually.
+- Add unique constraints for normalized domain, slug, payment provider ID, idempotency key, vote per launch and non-overlapping placement slots.
+
+## 12. Analytics and observability
+
+Use the approved event names and do not invent variants casually:
+
+- `search_submitted`
+- `filter_applied`
+- `product_impression`
+- `product_opened`
+- `outbound_clicked`
+- `submit_started`
+- `metadata_loaded`
+- `submit_completed`
+- `payment_started`
+- `payment_succeeded`
+- `moderation_approved`
+- `vote_started`
+- `vote_cast`
+- `placement_viewed`
+- `placement_clicked`
+- `badge_copied`
+- `share_card_downloaded`
+
+Events must have a documented payload, a stable product ID and an attribution context where relevant.
+Do not send raw user text, private emails, comments or unnecessary personal data to analytics.
+
+## 13. Accessibility and responsive behavior
+
+- Every control must have an accessible name.
+- Minimum interactive target: 44×44px.
+- Visible `:focus-visible` state is mandatory.
+- Maintain readable contrast on canvas, product surfaces and copper backgrounds.
+- Never communicate status by color alone.
+- Provide a list/accessibility alternative for the map.
+- Test at keyboard-only, mobile width and 200% zoom.
+- Keep all essential content available without hover.
+- Use responsive composition, not simply smaller desktop components.
+
+## 14. Testing requirements
+
+For every feature, add the smallest appropriate set of:
+
+- unit tests for pure logic;
+- component tests for important states;
+- integration tests for form/payment/moderation boundaries;
+- E2E tests for critical user journeys.
+
+At minimum, preserve tests for:
+
+- URL metadata loading and correction;
+- duplicate product detection;
+- payment webhook idempotency;
+- moderation approval and rejection/refund;
+- one vote per user per launch;
+- Product of the Week independence from payment;
+- sponsored/nofollow link attributes;
+- expired placements disappearing automatically;
+- safe redirect allowlist;
+- accessible search, cards and map alternative.
+
+## 15. File and naming conventions
+
+- Use TypeScript strict mode.
+- Use `PascalCase` for React components and `camelCase` for functions/variables.
+- Use kebab-case for route segments and file names where the repository convention allows it.
+- Prefer named exports for reusable components.
+- Keep types close to the domain that owns them; shared types go in the approved shared types module.
+- Do not create `utils.ts`, `helpers.ts` or `misc.ts` as a dumping ground.
+- Keep one responsibility per module.
+- Every new environment variable must be documented and validated at startup.
+- Every schema or migration change needs a migration file and a short ADR when it affects a boundary.
+
+## 16. Definition of Done
+
+A change is complete only when:
+
+- It follows the product invariants.
+- It uses existing design-system tokens and components.
+- It has no arbitrary hardcoded colors, spacing, radii or duplicated component markup.
+- It handles loading, empty, error, success, disabled and mobile states where relevant.
+- It is authorized server-side and validated at external boundaries.
+- It includes analytics only from the approved vocabulary.
+- It has tests appropriate to its risk.
+- It passes typecheck, lint, tests and build.
+- SEO and accessibility are checked for public pages.
+- The final response names changed files, checks run and any remaining risk.
+
+## 17. Forbidden shortcuts
+
+Do not:
+
+- hardcode a visual fix in one page instead of updating the component or token;
+- add inline styles to bypass the design system;
+- duplicate a ProductCard or Button with slightly different markup;
+- put payment, vote or moderation rules only in the client;
+- activate a product after a client-side payment response;
+- mix sponsored products into organic sorting;
+- sell or emit dofollow links;
+- add comments, recommendations, personalization or mobile apps to MVP without an explicit product decision;
+- use map bubbles as a payment-based ranking;
+- add a dependency for a problem solved by the existing stack;
+- rewrite unrelated files during a focused task;
+- suppress errors or claim successful validation without running it.
+
+When a shortcut appears necessary, stop and propose the smallest reusable abstraction or an ADR.

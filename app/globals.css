@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+:root {
+  /* Brand neutrals */
+  --ink: #141616;
+  --canvas: #f6f4ef;
+  --surface: #fffdfa;
+  --line: color-mix(in srgb, var(--ink) 12%, transparent);
+
+  /* Brand action */
+  --copper: #c76b4c;
+  --copper-dark: #944b38;
+  --copper-soft: color-mix(in srgb, var(--copper) 16%, var(--surface));
+
+  /* Product surfaces */
+  --peach: #f3cdbd;
+  --mint: #dcebdc;
+  --lilac: #e4d8f0;
+  --sky: #d7e6f2;
+
+  /* Semantic */
+  --success: #2f6b4f;
+  --warning: #9a6b1f;
+  --danger: #a33b2f;
+  --info: #2f5f7a;
+
+  /* Shape */
+  --radius-card: 16px;
+  --radius-hero: 24px;
+  --radius-pill: 999px;
+
+  /* Elevation */
+  --shadow-soft: 0 8px 24px color-mix(in srgb, var(--ink) 6%, transparent);
+
+  /* Focus */
+  --focus-ring: 2px solid var(--copper);
+  --focus-offset: 2px;
+
+  /* Content */
+  --content-max: 1440px;
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-copper: var(--copper);
+  --color-copper-dark: var(--copper-dark);
+  --color-copper-soft: var(--copper-soft);
+  --color-peach: var(--peach);
+  --color-mint: var(--mint);
+  --color-lilac: var(--lilac);
+  --color-sky: var(--sky);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
+
+  --font-sans: var(--font-geologica);
+  --font-mono: var(--font-plex-mono);
+
+  --radius-card: var(--radius-card);
+  --radius-hero: var(--radius-hero);
+  --radius-pill: var(--radius-pill);
+
+  --shadow-soft: var(--shadow-soft);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-geologica), system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  :focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
+  }
+
+  ::selection {
+    background: var(--copper-soft);
+    color: var(--ink);
+  }
+}
+
+.font-mono-meta {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  letter-spacing: 0.02em;
+}
+
+/* Skip link: visible on keyboard focus */
+.sr-only:focus,
+.sr-only:focus-visible {
+  position: absolute;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0.75rem 1rem;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
