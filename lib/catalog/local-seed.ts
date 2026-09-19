@@ -195,7 +195,7 @@ const PLATFORM_OVERRIDES: Record<string, string[]> = {
   headway: ["ios", "android", "web"],
   happ: ["web"],
   keyapp: ["ios", "android", "web"],
-  som: ["web"],
+  som: ["web", "ios", "android"],
 };
 
 const TAGLINE_UK: Record<string, string> = {
@@ -226,7 +226,7 @@ const TAGLINE_UK: Record<string, string> = {
   "SE Ranking": "SEO-платформа для просування сайтів.",
   Serpstat: "SEO-інструменти для пошукового маркетингу.",
   "Snov.io": "Cold outreach і sales engagement.",
-  SOM: "Розіграші та результати для соцмереж.",
+  SOM: "Рандомайзер для розіграшів у Instagram, TikTok, Facebook, YouTube та Threads.",
   TrendHERO: "Пошук і перевірка блогерів в Instagram.",
   WayForPay: "Прийом платежів для українського бізнесу.",
   "Work.ua": "Сайт пошуку роботи №1 в Україні.",
@@ -474,7 +474,7 @@ function enhancePassportDemos(products: CatalogProduct[]): CatalogProduct[] {
         "Serpstat — SEO-платформа для пошукового маркетингу: дослідження ключових слів, аудит сайту, відстеження позицій і аналіз конкурентів. Команда з України розвиває продукт для маркетологів і агенцій.",
       extraLinks: [
         { label: "Блог", url: "https://serpstat.com/blog/" },
-        { label: "Pricing", url: "https://serpstat.com/pricing/" },
+        { label: "Тарифи", url: "https://serpstat.com/pricing/" },
       ],
       creatorName: "Команда Serpstat",
       creatorLinkedInUrl: "https://www.linkedin.com/company/serpstat/",
@@ -483,6 +483,32 @@ function enhancePassportDemos(products: CatalogProduct[]): CatalogProduct[] {
       relatedSlugs: seRanking ? ["se-ranking"] : [],
     });
   }
+
+  // Owner-confirmed product: newest by publishedAt (not a hard pin).
+  const som = bySlug.get("som");
+  if (som) {
+    const confirmedAt = new Date(Date.UTC(2026, 8, 19, 18, 0, 0)).toISOString();
+    bySlug.set("som", {
+      ...som,
+      name: "СОМ",
+      tagline: "Рандомайзер для розіграшів у Instagram, TikTok, Facebook, YouTube та Threads.",
+      description:
+        "СОМ — сервіс для чесних розіграшів у соцмережах: збір учасників, випадковий вибір переможця та прозорі результати для SMM і маркетологів.",
+      categorySlug: "som",
+      categoryName: "СОМ",
+      platforms: normalizePlatforms(["web", "ios", "android"]),
+      claimable: false,
+      ukraineNote:
+        "Український продукт. Власник підтвердив картку та звʼязок з командою.",
+      lastVerifiedAt: confirmedAt,
+      publishedAt: confirmedAt,
+      listingTier: "passport",
+      seoTitle: "СОМ — розіграші в соцмережах",
+      seoDescription:
+        "Рандомайзер для розіграшів у Instagram, TikTok, Facebook, YouTube та Threads.",
+    });
+  }
+
   return [...bySlug.values()].sort((a, b) =>
     a.name.localeCompare(b.name, "uk"),
   );

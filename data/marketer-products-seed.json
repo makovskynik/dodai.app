@@ -354,13 +354,13 @@
     "name": "SOM",
     "title": "SOM - Cервис для розыгрышей в соцсетях",
     "website": "https://it-som.net/",
-    "description": null,
+    "description": "СОМ — сервіс для чесних розіграшів у соцмережах: збір учасників, випадковий вибір переможця та прозорі результати.",
     "marketer_url": "https://marketer.ua/ru/website/som/",
     "source": "https://marketer.ua/ru/website/",
     "status": "editorial_seed",
-    "claimable": true,
+    "claimable": false,
     "kind": "giveaways",
-    "short_uk": "Розыгрыши в соцсетях",
+    "short_uk": "Рандомайзер для розіграшів у соцмережах.",
     "seed_for_dodai": true
   },
   {
