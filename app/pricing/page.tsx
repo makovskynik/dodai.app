@@ -33,6 +33,7 @@ export default async function PricingPage() {
       "catalog_category",
       now,
     ),
+    map_logo: getSurfaceAvailability(inventory, "map_logo", now),
     map_highlight: getSurfaceAvailability(inventory, "map_highlight", now),
   };
 
@@ -117,8 +118,8 @@ export default async function PricingPage() {
           Спонсорські місця (окремо)
         </h2>
         <p className="mt-2 max-w-2xl text-sm text-ink/65">
-          Тимчасова видимість. На мапі — збільшений маркер (×3), не лейбл.
-          Founding-ціни; місць обмежено.
+          На мапі три рівні: точка (безкоштовно), логотип і великий логотип —
+          платні слоти з лімітом. Founding-ціни.
         </p>
         <div className="mt-6 overflow-x-auto rounded-card border border-line bg-surface">
           <table className="w-full min-w-[720px] text-left text-sm">

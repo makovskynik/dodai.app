@@ -37,6 +37,7 @@ export const placementSurfaceEnum = pgEnum("placement_surface", [
   "catalog_home",
   "catalog_category",
   "map_highlight",
+  "map_logo",
 ]);
 
 export const placementStatusEnum = pgEnum("placement_status", [

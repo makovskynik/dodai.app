@@ -3,7 +3,10 @@ import { MapExplorer } from "@/features/map/MapExplorer";
 import { getCatalog } from "@/lib/catalog/queries";
 import { clusterProductsByCity } from "@/lib/map/cluster";
 import { buildPageMetadata } from "@/lib/seo/metadata";
-import { getActiveMapHighlightSlugs } from "@/server/placements/queries";
+import {
+  getActiveMapHighlightSlugs,
+  getActiveMapLogoSlugs,
+} from "@/server/placements/queries";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Мапа українських продуктів",
@@ -13,8 +16,9 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default async function MapPage() {
-  const [catalog, highlightSlugs] = await Promise.all([
+  const [catalog, logoSlugs, largeSlugs] = await Promise.all([
     getCatalog({ sort: "name" }),
+    getActiveMapLogoSlugs(),
     getActiveMapHighlightSlugs(),
   ]);
 
@@ -28,9 +32,8 @@ export default async function MapPage() {
           Мапа продуктів
         </h1>
         <p className="mt-3 text-[15px] leading-relaxed text-ink/70">
-          Контекст українських цифрових продуктів. Наблизьте мапу — побачите
-          окремі проєкти. Задача важливіша за місто: одразу в каталог за
-          категорією.
+          Більшість маркерів — компактні точки. Логотип і великий логотип —
+          платні рівні з обмеженим інвентарем.
         </p>
       </header>
 
@@ -38,7 +41,8 @@ export default async function MapPage() {
         <MapExplorer
           clusters={clusters}
           unlocated={unlocated}
-          highlightSlugs={[...highlightSlugs]}
+          logoSlugs={[...logoSlugs]}
+          largeSlugs={[...largeSlugs]}
         />
       </div>
     </div>

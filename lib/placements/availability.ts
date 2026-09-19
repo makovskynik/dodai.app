@@ -3,10 +3,10 @@ import {
   listActivePlacements,
   rangesOverlap,
 } from "@/lib/placements/inventory";
-import type { PlacementRecord } from "@/lib/placements/types";
+import type { PlacementRecord, PlacementSurface } from "@/lib/placements/types";
 
 export type PlacementAvailability = {
-  surface: "map_highlight" | "catalog_home" | "catalog_category";
+  surface: PlacementSurface;
   maxConcurrent: number;
   activeCount: number;
   availableCount: number;
@@ -14,50 +14,9 @@ export type PlacementAvailability = {
   statusUk: string;
 };
 
-function monthWindow(now: Date): { start: Date; end: Date } {
-  const start = new Date(
-    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0),
-  );
-  const end = new Date(
-    Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1, 0, 0, 0),
-  );
-  return { start, end };
-}
-
-/**
- * Count placements that occupy inventory during the current calendar month
- * (UTC), including active/reserved that overlap the month window.
- */
-export function countOccupyingPlacements(
-  inventory: PlacementRecord[],
-  surface: PlacementAvailability["surface"],
-  now: Date = new Date(),
-): number {
-  const { start, end } = monthWindow(now);
-  const occupying = inventory.filter((placement) => {
-    if (placement.surface !== surface) return false;
-    if (placement.status !== "active" && placement.status !== "reserved") {
-      return false;
-    }
-    return rangesOverlap(
-      start,
-      end,
-      new Date(placement.startsAt),
-      new Date(placement.endsAt),
-    );
-  });
-  // Concurrent cap is about simultaneous live slots — use live-now when available,
-  // else fall back to month-overlapping unique products.
-  const liveNow = listActivePlacements(inventory, now, [surface]);
-  if (liveNow.length > 0 || occupying.length === 0) {
-    return liveNow.length;
-  }
-  return new Set(occupying.map((item) => item.productSlug)).size;
-}
-
 export function getSurfaceAvailability(
   inventory: PlacementRecord[],
-  surface: PlacementAvailability["surface"],
+  surface: PlacementSurface,
   now: Date = new Date(),
 ): PlacementAvailability {
   const sku = getPlacementSku(surface);
@@ -93,15 +52,16 @@ export function getMapHighlightAvailability(
   return getSurfaceAvailability(inventory, "map_highlight", now);
 }
 
-/** True if adding one more map slot for [startsAt, endsAt) would exceed cap. */
-export function wouldExceedMapHighlightCap(
+/** True if adding one more slot for [startsAt, endsAt) would exceed cap. */
+export function wouldExceedSurfaceCap(
   inventory: PlacementRecord[],
+  surface: PlacementSurface,
   startsAt: Date,
   endsAt: Date,
-  maxConcurrent = 5,
+  maxConcurrent: number,
 ): boolean {
   const overlapping = inventory.filter((placement) => {
-    if (placement.surface !== "map_highlight") return false;
+    if (placement.surface !== surface) return false;
     if (placement.status !== "active" && placement.status !== "reserved") {
       return false;
     }
@@ -113,4 +73,20 @@ export function wouldExceedMapHighlightCap(
     );
   });
   return overlapping.length >= maxConcurrent;
+}
+
+/** @deprecated Prefer wouldExceedSurfaceCap */
+export function wouldExceedMapHighlightCap(
+  inventory: PlacementRecord[],
+  startsAt: Date,
+  endsAt: Date,
+  maxConcurrent = 5,
+): boolean {
+  return wouldExceedSurfaceCap(
+    inventory,
+    "map_highlight",
+    startsAt,
+    endsAt,
+    maxConcurrent,
+  );
 }

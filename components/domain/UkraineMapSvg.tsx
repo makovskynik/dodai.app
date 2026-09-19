@@ -8,6 +8,11 @@ import {
 import type { MapCluster } from "@/lib/map/cluster";
 import { cityByOblastId } from "@/lib/map/cities";
 import type { CatalogProduct } from "@/lib/catalog/types";
+import {
+  MAP_TIER_RADIUS,
+  resolveMapMarkerTier,
+  type MapMarkerTier,
+} from "@/lib/map/marker-tier";
 
 const DETAIL_ZOOM = 1.7;
 const MAP_W = 1000;
@@ -16,7 +21,10 @@ const DRAG_THRESHOLD_PX = 8;
 
 type UkraineMapSvgProps = {
   clusters: MapCluster[];
-  highlightSlugs: Set<string>;
+  /** Level 2 — mid-size logo. */
+  logoSlugs: Set<string>;
+  /** Level 3 — large logo. */
+  largeSlugs: Set<string>;
   activeCitySlug: string | null;
   zoom: number;
   focusX: number;
@@ -33,16 +41,23 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
 
-function productOffset(count: number, index: number, hasLarge = false) {
+function productOffset(count: number, index: number, maxTier: 1 | 2 | 3) {
   if (count <= 1) return { dx: 0, dy: 0 };
-  const radius = (hasLarge ? 52 : 26) + Math.min(count, 8) * 4;
-  const angle = -Math.PI / 2 + (index / count) * Math.PI * 2;
-  return { dx: Math.cos(angle) * radius, dy: Math.sin(angle) * radius };
+  // Golden-angle spiral packs better than a single ring for dense cities.
+  const golden = Math.PI * (3 - Math.sqrt(5));
+  const angle = index * golden;
+  const step = maxTier >= 3 ? 16 : maxTier >= 2 ? 11 : 7;
+  const radius = step * Math.sqrt(index + 0.35);
+  return {
+    dx: Math.cos(angle) * radius,
+    dy: Math.sin(angle) * radius,
+  };
 }
 
 export function UkraineMapSvg({
   clusters,
-  highlightSlugs,
+  logoSlugs,
+  largeSlugs,
   activeCitySlug,
   zoom,
   focusX,
@@ -341,86 +356,117 @@ export function UkraineMapSvg({
           >
             {cluster.city.nameUk}
           </text>
-          {cluster.products.map((product, index) => {
-            const hasLarge = cluster.products.some((item) =>
-              highlightSlugs.has(item.slug),
+          {(() => {
+            const ranked = [...cluster.products]
+              .map((product) => ({
+                product,
+                tier: resolveMapMarkerTier(
+                  product.slug,
+                  logoSlugs,
+                  largeSlugs,
+                ),
+              }))
+              .sort((a, b) => a.tier - b.tier || a.product.slug.localeCompare(b.product.slug));
+            const maxTier = ranked.reduce(
+              (max, item) => (item.tier > max ? item.tier : max),
+              1 as MapMarkerTier,
             );
-            const { dx, dy } = productOffset(
-              cluster.products.length,
-              index,
-              hasLarge,
-            );
-            const x = cluster.city.x + dx;
-            const y = cluster.city.y + dy;
-            // Map size boost is only for purchased map_highlight slots.
-            const isMapSponsored = highlightSlugs.has(product.slug);
-            const r = isMapSponsored ? 48 : 16;
-            const logo = isMapSponsored ? 36 : 12;
-            const fontSize = isMapSponsored ? 18 : 9;
 
-            return (
-              <g
-                key={product.slug}
-                transform={`translate(${x} ${y})`}
-                className="cursor-pointer"
-                role="button"
-                tabIndex={0}
-                aria-label={
-                  isMapSponsored
-                    ? `${product.name}, збільшений спонсорський маркер`
-                    : product.name
-                }
-                onClick={(event) => {
-                  event.stopPropagation();
-                  if (suppressClickRef.current) return;
-                  onOpenProduct(product);
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter" || event.key === " ") {
-                    event.preventDefault();
-                    onOpenProduct(product);
+            return ranked.map(({ product, tier }, index) => {
+              const { dx, dy } = productOffset(
+                ranked.length,
+                index,
+                maxTier,
+              );
+              const x = cluster.city.x + dx;
+              const y = cluster.city.y + dy;
+              const r = MAP_TIER_RADIUS[tier];
+              const logoHalf = tier === 3 ? 32 : tier === 2 ? 10 : 0;
+              const fontSize = tier === 3 ? 16 : 8;
+
+              return (
+                <g
+                  key={product.slug}
+                  transform={`translate(${x} ${y})`}
+                  className="cursor-pointer"
+                  role="button"
+                  tabIndex={0}
+                  aria-label={
+                    tier === 1
+                      ? `${product.name}, точка на мапі`
+                      : tier === 2
+                        ? `${product.name}, логотип на мапі`
+                        : `${product.name}, великий логотип на мапі`
                   }
-                }}
-              >
-                <circle
-                  r={r}
-                  fill="var(--surface)"
-                  stroke="var(--ink)"
-                  strokeOpacity={isMapSponsored ? 0.28 : 0.18}
-                  strokeWidth={isMapSponsored ? 2 : 1.5}
-                />
-                {product.logoUrl ? (
-                  <image
-                    href={product.logoUrl}
-                    x={-logo}
-                    y={-logo}
-                    width={logo * 2}
-                    height={logo * 2}
-                    clipPath={
-                      isMapSponsored
-                        ? "url(#logo-clip-lg)"
-                        : "url(#logo-clip)"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    if (suppressClickRef.current) return;
+                    onOpenProduct(product);
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      onOpenProduct(product);
                     }
-                    preserveAspectRatio="xMidYMid meet"
-                  />
-                ) : (
-                  <text
-                    textAnchor="middle"
-                    dominantBaseline="central"
-                    fill="var(--ink)"
-                    fontSize={fontSize}
-                    fontFamily="Geologica, sans-serif"
-                    fontWeight="600"
-                  >
-                    {product.initials}
-                  </text>
-                )}
-                <title>
-                  {`${product.name}${isMapSponsored ? " · збільшений на мапі" : ""}`}
-                </title>
-              </g>
-            );
-          })}
+                  }}
+                >
+                  {tier === 1 ? (
+                    <circle
+                      r={r}
+                      fill="var(--copper)"
+                      stroke="var(--surface)"
+                      strokeWidth="1.25"
+                    />
+                  ) : (
+                    <>
+                      <circle
+                        r={r}
+                        fill="var(--surface)"
+                        stroke="var(--ink)"
+                        strokeOpacity={tier === 3 ? 0.28 : 0.16}
+                        strokeWidth={tier === 3 ? 2 : 1.25}
+                      />
+                      {product.logoUrl ? (
+                        <image
+                          href={product.logoUrl}
+                          x={-logoHalf}
+                          y={-logoHalf}
+                          width={logoHalf * 2}
+                          height={logoHalf * 2}
+                          clipPath={
+                            tier === 3
+                              ? "url(#logo-clip-lg)"
+                              : "url(#logo-clip)"
+                          }
+                          preserveAspectRatio="xMidYMid meet"
+                        />
+                      ) : (
+                        <text
+                          textAnchor="middle"
+                          dominantBaseline="central"
+                          fill="var(--ink)"
+                          fontSize={fontSize}
+                          fontFamily="Geologica, sans-serif"
+                          fontWeight="600"
+                        >
+                          {product.initials}
+                        </text>
+                      )}
+                    </>
+                  )}
+                  <title>
+                    {`${product.name}${
+                      tier === 3
+                        ? " · великий логотип"
+                        : tier === 2
+                          ? " · логотип"
+                          : ""
+                    }`}
+                  </title>
+                </g>
+              );
+            });
+          })()}
         </g>
       ))}
     </svg>

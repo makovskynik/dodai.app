@@ -80,6 +80,14 @@ export function listActiveMapHighlightSlugs(
   return new Set(active.map((placement) => placement.productSlug));
 }
 
+export function listActiveMapLogoSlugs(
+  inventory: PlacementRecord[],
+  now: Date = new Date(),
+): Set<string> {
+  const active = listActivePlacements(inventory, now, ["map_logo"]);
+  return new Set(active.map((placement) => placement.productSlug));
+}
+
 export function effectivePlacementStatus(
   placement: PlacementRecord,
   now: Date = new Date(),

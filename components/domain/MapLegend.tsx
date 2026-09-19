@@ -5,12 +5,21 @@ export function MapLegend() {
     <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-ink/70">
       <li className="flex items-center gap-2">
         <span
+          className="inline-flex h-9 w-9 items-center justify-center"
+          aria-hidden
+        >
+          <span className="h-2.5 w-2.5 rounded-full bg-copper" />
+        </span>
+        <span>Рівень 1 · точка (безкоштовно)</span>
+      </li>
+      <li className="flex items-center gap-2">
+        <span
           className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line bg-surface"
           aria-hidden
         >
           <span className="h-5 w-5 rounded-full bg-canvas" />
         </span>
-        <span>Звичайний маркер</span>
+        <span>Рівень 2 · логотип</span>
       </li>
       <li className="flex items-center gap-2">
         <span
@@ -19,7 +28,7 @@ export function MapLegend() {
         >
           <span className="h-10 w-10 rounded-full bg-canvas" />
         </span>
-        <span>Спонсор на мапі (×3, до 5)</span>
+        <span>Рівень 3 · великий лого (до 5)</span>
       </li>
       <li className="flex items-center gap-2">
         <DodaiMapPin />

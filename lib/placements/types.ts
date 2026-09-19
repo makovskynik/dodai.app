@@ -1,7 +1,8 @@
 export type PlacementSurface =
   | "catalog_home"
   | "catalog_category"
-  | "map_highlight";
+  | "map_highlight"
+  | "map_logo";
 
 export type PlacementStatus =
   | "reserved"

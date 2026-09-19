@@ -5,8 +5,10 @@ import {
   findOverlappingPlacement,
   listActiveCatalogProductSlugs,
   listActiveMapHighlightSlugs,
+  listActiveMapLogoSlugs,
 } from "@/lib/placements/inventory";
-import { wouldExceedMapHighlightCap } from "@/lib/placements/availability";
+import { wouldExceedSurfaceCap } from "@/lib/placements/availability";
+import { getPlacementSku } from "@/lib/pricing/catalog";
 import { LOCAL_DEMO_PLACEMENTS } from "@/lib/placements/local-inventory";
 import type {
   PlacementRecord,
@@ -71,6 +73,13 @@ export async function getActiveMapHighlightSlugs(
   return listActiveMapHighlightSlugs(inventory, now);
 }
 
+export async function getActiveMapLogoSlugs(
+  now: Date = new Date(),
+): Promise<Set<string>> {
+  const inventory = await getPlacementInventory();
+  return listActiveMapLogoSlugs(inventory, now);
+}
+
 export class PlacementOverlapError extends Error {
   constructor(message = "Placement slot overlaps an existing reservation") {
     super(message);
@@ -79,7 +88,7 @@ export class PlacementOverlapError extends Error {
 }
 
 export class PlacementCapacityError extends Error {
-  constructor(message = "Немає вільних місць на мапі (ліміт 5)") {
+  constructor(message = "Немає вільних місць на мапі") {
     super(message);
     this.name = "PlacementCapacityError";
   }
@@ -93,12 +102,24 @@ export async function reservePlacement(
     throw new Error("Placement endsAt must be after startsAt");
   }
 
-  if (input.surface === "map_highlight") {
+  if (input.surface === "map_highlight" || input.surface === "map_logo") {
     const fullInventory = await loadDbInventory(db);
+    const sku = getPlacementSku(input.surface);
+    const cap = sku?.maxConcurrent ?? 1;
     if (
-      wouldExceedMapHighlightCap(fullInventory, input.startsAt, input.endsAt, 5)
+      wouldExceedSurfaceCap(
+        fullInventory,
+        input.surface,
+        input.startsAt,
+        input.endsAt,
+        cap,
+      )
     ) {
-      throw new PlacementCapacityError();
+      throw new PlacementCapacityError(
+        input.surface === "map_logo"
+          ? `Немає вільних місць для логотипів на мапі (ліміт ${cap})`
+          : `Немає вільних місць для великих маркерів (ліміт ${cap})`,
+      );
     }
   }
 

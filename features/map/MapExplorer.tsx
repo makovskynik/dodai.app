@@ -23,7 +23,8 @@ const MAX_ZOOM = 2.8;
 type MapExplorerProps = {
   clusters: MapCluster[];
   unlocated: CatalogProduct[];
-  highlightSlugs: string[];
+  logoSlugs: string[];
+  largeSlugs: string[];
 };
 
 type CategoryChip = {
@@ -34,10 +35,10 @@ type CategoryChip = {
 
 function ProductPreviewRow({
   product,
-  highlighted,
+  tier,
 }: {
   product: CatalogProduct;
-  highlighted: boolean;
+  tier: 1 | 2 | 3;
 }) {
   return (
     <li>
@@ -55,9 +56,13 @@ function ProductPreviewRow({
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <span className="font-semibold text-ink">{product.name}</span>
-            {highlighted ? (
+            {tier === 3 ? (
               <span className="font-mono-meta rounded-pill border border-line bg-surface px-2 py-0.5 text-[10px] uppercase text-ink/60">
-                ×3 на мапі
+                Великий лого
+              </span>
+            ) : tier === 2 ? (
+              <span className="font-mono-meta rounded-pill border border-line bg-surface px-2 py-0.5 text-[10px] uppercase text-ink/60">
+                Логотип
               </span>
             ) : product.badge === "promoted" ? (
               <PlacementBadge />
@@ -83,10 +88,12 @@ function clampZoom(value: number) {
 export function MapExplorer({
   clusters,
   unlocated,
-  highlightSlugs,
+  logoSlugs,
+  largeSlugs,
 }: MapExplorerProps) {
   const router = useRouter();
-  const highlightSet = new Set(highlightSlugs);
+  const logoSet = new Set(logoSlugs);
+  const largeSet = new Set(largeSlugs);
   const [activeCitySlug, setActiveCitySlug] = useState<string | null>(null);
   const [emptyOblastName, setEmptyOblastName] = useState<string | null>(null);
   const [zoom, setZoom] = useState(1);
@@ -270,7 +277,8 @@ export function MapExplorer({
         <div className="aspect-[1000/680] max-h-[min(52vh,460px)] w-full touch-none">
           <UkraineMapSvg
             clusters={clusters}
-            highlightSlugs={highlightSet}
+            logoSlugs={logoSet}
+            largeSlugs={largeSet}
             activeCitySlug={activeCitySlug}
             zoom={zoom}
             focusX={focus.x}
@@ -327,13 +335,20 @@ export function MapExplorer({
       >
         {activeCluster ? (
           <ul className="space-y-3">
-            {previewProducts.map((product) => (
-              <ProductPreviewRow
-                key={product.id}
-                product={product}
-                highlighted={highlightSet.has(product.slug)}
-              />
-            ))}
+            {previewProducts.map((product) => {
+              const tier = largeSet.has(product.slug)
+                ? 3
+                : logoSet.has(product.slug)
+                  ? 2
+                  : 1;
+              return (
+                <ProductPreviewRow
+                  key={product.id}
+                  product={product}
+                  tier={tier}
+                />
+              );
+            })}
             {remaining > 0 ? (
               <li className="text-sm text-ink/60">
                 Ще {remaining} у каталозі за запитом «{activeCluster.city.nameUk}».

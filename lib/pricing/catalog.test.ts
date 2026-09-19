@@ -28,9 +28,11 @@ test("placements are 30-day only", () => {
   }
 });
 
-test("map highlight price is per product, inventory is five", () => {
-  const map = PLACEMENT_SKUS.find((s) => s.id === "map_highlight")!;
-  assert.equal(map.maxConcurrent, 5);
-  assert.equal(map.pricesUah[30], 690);
-  assert.match(map.summaryUk, /×3/);
+test("map marker tiers: logo cap 25, large cap 5", () => {
+  const logo = PLACEMENT_SKUS.find((s) => s.id === "map_logo")!;
+  const large = PLACEMENT_SKUS.find((s) => s.id === "map_highlight")!;
+  assert.equal(logo.maxConcurrent, 25);
+  assert.equal(logo.pricesUah[30], 490);
+  assert.equal(large.maxConcurrent, 5);
+  assert.equal(large.pricesUah[30], 990);
 });
