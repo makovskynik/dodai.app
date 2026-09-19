@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200" role="img" aria-label="Ninety Pines">
+<defs xmlns="http://www.w3.org/2000/svg">
+<linearGradient xmlns="http://www.w3.org/2000/svg" id="sky" x1="0" y1="0" x2="0" y2="1">
+<stop xmlns="http://www.w3.org/2000/svg" offset="0" stop-color="#0d1a2e"></stop><stop xmlns="http://www.w3.org/2000/svg" offset="0.45" stop-color="#26415f"></stop>
+<stop xmlns="http://www.w3.org/2000/svg" offset="0.80" stop-color="#7d6a63"></stop><stop xmlns="http://www.w3.org/2000/svg" offset="1" stop-color="#dd8c4c"></stop>
+</linearGradient>
+<linearGradient xmlns="http://www.w3.org/2000/svg" id="sea" x1="0" y1="0" x2="0" y2="1">
+<stop xmlns="http://www.w3.org/2000/svg" offset="0" stop-color="#2a5266"></stop><stop xmlns="http://www.w3.org/2000/svg" offset="0.6" stop-color="#0f2434"></stop>
+<stop xmlns="http://www.w3.org/2000/svg" offset="1" stop-color="#08131d"></stop>
+</linearGradient>
+<radialGradient xmlns="http://www.w3.org/2000/svg" id="glow" cx="0.5" cy="0.5" r="0.5">
+<stop xmlns="http://www.w3.org/2000/svg" offset="0" stop-color="#ffd08c" stop-opacity="0.55"></stop>
+<stop xmlns="http://www.w3.org/2000/svg" offset="1" stop-color="#ffd08c" stop-opacity="0"></stop>
+</radialGradient>
+</defs>
+<rect xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" fill="url(#sky)"></rect>
+<circle xmlns="http://www.w3.org/2000/svg" cx="600" cy="700" r="400" fill="url(#glow)"></circle>
+<circle xmlns="http://www.w3.org/2000/svg" cx="600" cy="704" r="172" fill="#ffc574"></circle>
+<rect xmlns="http://www.w3.org/2000/svg" y="712" width="1200" height="488" fill="url(#sea)"></rect>
+<g xmlns="http://www.w3.org/2000/svg" fill="#ffffff" opacity="0.11">
+<rect xmlns="http://www.w3.org/2000/svg" x="330" y="740" width="540" height="10" rx="5"></rect>
+<rect xmlns="http://www.w3.org/2000/svg" x="440" y="784" width="320" height="8" rx="4"></rect>
+<rect xmlns="http://www.w3.org/2000/svg" x="110" y="762" width="160" height="7" rx="3.5"></rect>
+<rect xmlns="http://www.w3.org/2000/svg" x="940" y="772" width="170" height="7" rx="3.5"></rect>
+</g>
+<g xmlns="http://www.w3.org/2000/svg" fill="#04090f">
+<ellipse xmlns="http://www.w3.org/2000/svg" cx="600" cy="1090" rx="670" ry="240"></ellipse>
+<rect xmlns="http://www.w3.org/2000/svg" y="1070" width="1200" height="130"></rect>
+<g xmlns="http://www.w3.org/2000/svg" transform="translate(168,862) scale(0.8)"><rect xmlns="http://www.w3.org/2000/svg" x="-11" y="-52" width="22" height="58" rx="4"></rect><polygon xmlns="http://www.w3.org/2000/svg" points="0,-162 -92,-44 92,-44"></polygon><polygon xmlns="http://www.w3.org/2000/svg" points="0,-246 -72,-132 72,-132"></polygon><polygon xmlns="http://www.w3.org/2000/svg" points="0,-336 -52,-218 52,-218"></polygon></g><g xmlns="http://www.w3.org/2000/svg" transform="translate(332,880) scale(1.0)"><rect xmlns="http://www.w3.org/2000/svg" x="-11" y="-52" width="22" height="58" rx="4"></rect><polygon xmlns="http://www.w3.org/2000/svg" points="0,-162 -92,-44 92,-44"></polygon><polygon xmlns="http://www.w3.org/2000/svg" points="0,-246 -72,-132 72,-132"></polygon><polygon xmlns="http://www.w3.org/2000/svg" points="0,-336 -52,-218 52,-218"></polygon></g><g xmlns="http://www.w3.org/2000/svg" transform="translate(524,892) scale(1.26)"><rect xmlns="http://www.w3.org/2000/svg" x="-11" y="-52" width="22" height="58" rx="4"></rect><polygon xmlns="http://www.w3.org/2000/svg" points="0,-162 -92,-44 92,-44"></polygon><polygon xmlns="http://www.w3.org/2000/svg" points="0,-246 -72,-132 72,-132"></polygon><polygon xmlns="http://www.w3.org/2000/svg" points="0,-336 -52,-218 52,-218"></polygon></g><g xmlns="http://www.w3.org/2000/svg" transform="translate(724,890) scale(1.14)"><rect xmlns="http://www.w3.org/2000/svg" x="-11" y="-52" width="22" height="58" rx="4"></rect><polygon xmlns="http://www.w3.org/2000/svg" points="0,-162 -92,-44 92,-44"></polygon><polygon xmlns="http://www.w3.org/2000/svg" points="0,-246 -72,-132 72,-132"></polygon><polygon xmlns="http://www.w3.org/2000/svg" points="0,-336 -52,-218 52,-218"></polygon></g><g xmlns="http://www.w3.org/2000/svg" transform="translate(902,874) scale(0.94)"><rect xmlns="http://www.w3.org/2000/svg" x="-11" y="-52" width="22" height="58" rx="4"></rect><polygon xmlns="http://www.w3.org/2000/svg" points="0,-162 -92,-44 92,-44"></polygon><polygon xmlns="http://www.w3.org/2000/svg" points="0,-246 -72,-132 72,-132"></polygon><polygon xmlns="http://www.w3.org/2000/svg" points="0,-336 -52,-218 52,-218"></polygon></g><g xmlns="http://www.w3.org/2000/svg" transform="translate(1052,856) scale(0.7)"><rect xmlns="http://www.w3.org/2000/svg" x="-11" y="-52" width="22" height="58" rx="4"></rect><polygon xmlns="http://www.w3.org/2000/svg" points="0,-162 -92,-44 92,-44"></polygon><polygon xmlns="http://www.w3.org/2000/svg" points="0,-246 -72,-132 72,-132"></polygon><polygon xmlns="http://www.w3.org/2000/svg" points="0,-336 -52,-218 52,-218"></polygon></g>
+</g>
+<g xmlns="http://www.w3.org/2000/svg" transform="translate(438,900) scale(1.15)"><rect xmlns="http://www.w3.org/2000/svg" x="-24" y="-30" width="48" height="34" rx="6" fill="#17242f"></rect><ellipse xmlns="http://www.w3.org/2000/svg" cx="0" cy="-30" rx="24" ry="9" fill="#33495c"></ellipse></g><g xmlns="http://www.w3.org/2000/svg" transform="translate(632,920) scale(0.95)"><rect xmlns="http://www.w3.org/2000/svg" x="-24" y="-30" width="48" height="34" rx="6" fill="#17242f"></rect><ellipse xmlns="http://www.w3.org/2000/svg" cx="0" cy="-30" rx="24" ry="9" fill="#33495c"></ellipse></g>
+</svg>

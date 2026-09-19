@@ -145,6 +145,12 @@ export const CATEGORY_OPTIONS = [
   { slug: "telephony", nameUk: "Телефонія" },
   { slug: "delivery", nameUk: "Доставка" },
   { slug: "business", nameUk: "Бізнес-софт" },
+  { slug: "health", nameUk: "Здоров’я" },
+  { slug: "games", nameUk: "Ігри" },
+  { slug: "design", nameUk: "Дизайн" },
+  { slug: "security", nameUk: "Безпека" },
+  { slug: "food", nameUk: "Їжа" },
+  { slug: "travel", nameUk: "Подорожі" },
   { slug: "tools", nameUk: "Інструменти" },
 ] as const;
 

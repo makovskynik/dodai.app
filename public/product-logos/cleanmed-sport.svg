@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect xmlns="http://www.w3.org/2000/svg" width="1200" height="630" fill="#F8FAFC"></rect>
+  <rect xmlns="http://www.w3.org/2000/svg" x="80" y="80" width="1040" height="470" rx="36" fill="#FFFFFF" stroke="#E2E8F0"></rect>
+  <g xmlns="http://www.w3.org/2000/svg" transform="translate(130 140)">
+    <rect xmlns="http://www.w3.org/2000/svg" width="84" height="84" rx="24" fill="#2563EB"></rect>
+    <path xmlns="http://www.w3.org/2000/svg" d="M42 14 64 23.2v15.4c0 13.2-8.7 24.3-22 28.7-13.3-4.4-22-15.5-22-28.7V23.2L42 14Z" fill="none" stroke="#fff" stroke-width="5"></path>
+    <path xmlns="http://www.w3.org/2000/svg" d="M42 29v25M29.5 41.5h25" stroke="#fff" stroke-linecap="round" stroke-width="6"></path>
+  </g>
+  <text xmlns="http://www.w3.org/2000/svg" x="240" y="180" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="48" font-weight="800">CleanMed Sport</text>
+  <text xmlns="http://www.w3.org/2000/svg" x="130" y="285" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="62" font-weight="900">Перевірка препаратів</text>
+  <text xmlns="http://www.w3.org/2000/svg" x="130" y="360" fill="#0F172A" font-family="Inter, Arial, sans-serif" font-size="62" font-weight="900">для спортсменів</text>
+  <text xmlns="http://www.w3.org/2000/svg" x="130" y="435" fill="#475569" font-family="Inter, Arial, sans-serif" font-size="30">Безкоштовно · Українські лікарські препарати · WADA 2026</text>
+</svg>

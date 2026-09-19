@@ -114,6 +114,10 @@ async function main() {
           sourceType: "editorial",
           claimable: product.claimable,
           surface: product.surface,
+          listingTier: product.listingTier ?? "free",
+          creatorName: product.creatorName,
+          promoCode: product.promoCode,
+          relatedSlugs: product.relatedSlugs ?? [],
           publishedAt: product.publishedAt
             ? new Date(product.publishedAt)
             : new Date(),
@@ -143,6 +147,10 @@ async function main() {
           sourceType: "editorial",
           claimable: product.claimable,
           surface: product.surface,
+          listingTier: product.listingTier ?? "free",
+          creatorName: product.creatorName,
+          promoCode: product.promoCode,
+          relatedSlugs: product.relatedSlugs ?? [],
           publishedAt: product.publishedAt
             ? new Date(product.publishedAt)
             : new Date(),

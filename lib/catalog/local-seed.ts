@@ -7,6 +7,7 @@ import type {
 import { logoUrlForSlug } from "@/lib/catalog/logos";
 import { normalizePlatforms } from "@/lib/catalog/platforms";
 import marketerSeed from "@/data/marketer-products-seed.json";
+import osyoSeed from "@/data/osyo-products-seed.json";
 
 type MarketerSeedItem = {
   name: string;
@@ -16,6 +17,24 @@ type MarketerSeedItem = {
   short_uk?: string;
   claimable?: boolean;
   seed_for_dodai?: boolean;
+};
+
+type OsyoSeedItem = {
+  name: string;
+  slug: string;
+  website: string;
+  domain: string | null;
+  tagline: string;
+  description: string | null;
+  categorySlug: string;
+  categoryName: string;
+  platforms: string[];
+  logoUrl?: string | null;
+  claimable?: boolean;
+  seed_for_dodai?: boolean;
+  missingWebsite?: boolean;
+  sourceUrl?: string;
+  authorName?: string | null;
 };
 
 const KIND_TO_CATEGORY: Record<
@@ -137,6 +156,36 @@ const KIND_TO_CATEGORY: Record<
     nameUk: "Бізнес-софт",
     introUk: "Автоматизація та бізнес-софт для компаній.",
   },
+  health: {
+    slug: "health",
+    nameUk: "Здоров’я",
+    introUk: "Здоров’я, фітнес і wellbeing-продукти українських команд.",
+  },
+  games: {
+    slug: "games",
+    nameUk: "Ігри",
+    introUk: "Ігри та розважальні застосунки від українських розробників.",
+  },
+  design: {
+    slug: "design",
+    nameUk: "Дизайн",
+    introUk: "Дизайн, креатив і візуальні інструменти.",
+  },
+  security: {
+    slug: "security",
+    nameUk: "Безпека",
+    introUk: "Безпека, батьківський контроль і захист пристроїв.",
+  },
+  food: {
+    slug: "food",
+    nameUk: "Їжа",
+    introUk: "Рецепти, meal-planning і foodtech-продукти.",
+  },
+  travel: {
+    slug: "travel",
+    nameUk: "Подорожі",
+    introUk: "Подорожі, туризм і локальні travel-сервіси.",
+  },
 };
 
 const SURFACES: ProductSurface[] = ["mint", "sky", "lilac", "peach", "surface"];
@@ -232,7 +281,7 @@ function shortTagline(item: MarketerSeedItem): string {
   return fromDesc.length > 120 ? `${fromDesc.slice(0, 117)}…` : fromDesc;
 }
 
-function buildLocalCatalog(): CatalogProduct[] {
+function buildMarketerProducts(): CatalogProduct[] {
   const items = marketerSeed as MarketerSeedItem[];
   return items
     .filter((item) => item.seed_for_dodai !== false)
@@ -282,8 +331,87 @@ function buildLocalCatalog(): CatalogProduct[] {
         promoUrl: null,
         relatedSlugs: [],
       };
-    })
-    .sort((a, b) => a.name.localeCompare(b.name, "uk"));
+    });
+}
+
+function buildOsyoProducts(startIndex: number): CatalogProduct[] {
+  const items = osyoSeed as OsyoSeedItem[];
+  return items
+    .filter((item) => item.seed_for_dodai !== false && !item.missingWebsite)
+    .map((item, index) => {
+      const slug = item.slug || slugify(item.name);
+      const cityLabel =
+        SEED_CITIES[(startIndex + index) % SEED_CITIES.length] ?? null;
+      const sameAs = [item.website, item.sourceUrl].filter(Boolean) as string[];
+
+      return {
+        id: slug,
+        slug,
+        name: item.name,
+        tagline: (item.tagline || "Український цифровий продукт.").slice(0, 120),
+        description: item.description,
+        seoTitle: `${item.name} — український цифровий продукт`,
+        seoDescription: (item.tagline || item.description || "").slice(0, 160),
+        categorySlug: item.categorySlug || "tools",
+        categoryName: item.categoryName || "Інструменти",
+        platforms: normalizePlatforms(item.platforms ?? ["web"]),
+        website: item.website,
+        domain: item.domain ?? domainFromUrl(item.website),
+        initials: initialsFromName(item.name),
+        logoUrl: item.logoUrl ?? logoUrlForSlug(slug),
+        surface: SURFACES[(startIndex + index) % SURFACES.length],
+        badge: null as ProductBadge,
+        sourceType: "editorial" as const,
+        claimable: item.claimable !== false,
+        pricingModel: null,
+        hasUkrainianUi: null,
+        cityLabel,
+        ukraineNote:
+          "Імпортовано з каталогу Osyo з дозволу. Український цифровий продукт; claim відкритий.",
+        sameAs,
+        lastVerifiedAt: new Date(Date.UTC(2026, 8, 19)).toISOString(),
+        publishedAt: new Date(
+          Date.UTC(2026, 8, 19 - ((startIndex + index) % 14)),
+        ).toISOString(),
+        listingTier: "free" as const,
+        extraLinks: [],
+        creatorName: item.authorName ?? null,
+        creatorLinkedInUrl: null,
+        promoCode: null,
+        promoUrl: null,
+        relatedSlugs: [],
+      };
+    });
+}
+
+function mergeCatalogProducts(
+  primary: CatalogProduct[],
+  secondary: CatalogProduct[],
+): CatalogProduct[] {
+  const bySlug = new Map<string, CatalogProduct>();
+  const byDomain = new Map<string, string>();
+
+  for (const product of primary) {
+    bySlug.set(product.slug, product);
+    if (product.domain) byDomain.set(product.domain.toLowerCase(), product.slug);
+  }
+
+  for (const product of secondary) {
+    if (bySlug.has(product.slug)) continue;
+    if (product.domain && byDomain.has(product.domain.toLowerCase())) continue;
+    bySlug.set(product.slug, product);
+    if (product.domain) byDomain.set(product.domain.toLowerCase(), product.slug);
+  }
+
+  return [...bySlug.values()].sort((a, b) =>
+    a.name.localeCompare(b.name, "uk"),
+  );
+}
+
+function buildLocalCatalog(): CatalogProduct[] {
+  const marketer = buildMarketerProducts();
+  const osyo = buildOsyoProducts(marketer.length);
+  return mergeCatalogProducts(marketer, osyo);
 }
 
 export const localCatalogProducts: CatalogProduct[] = enhancePassportDemos(
@@ -320,10 +448,19 @@ export function listLocalCategories(
   products: CatalogProduct[] = localCatalogProducts,
 ): CatalogCategory[] {
   const introBySlug = new Map(
-    Object.values(KIND_TO_CATEGORY).map((category) => [
-      category.slug,
-      category.introUk,
-    ]),
+    [
+      ...Object.values(KIND_TO_CATEGORY).map((category) => [
+        category.slug,
+        category.introUk,
+      ] as const),
+      ["health", "Здоров’я, фітнес і wellbeing-продукти українських команд."] as const,
+      ["games", "Ігри та розважальні застосунки від українських розробників."] as const,
+      ["design", "Дизайн, креатив і візуальні інструменти."] as const,
+      ["security", "Безпека, батьківський контроль і захист пристроїв."] as const,
+      ["food", "Рецепти, meal-planning і foodtech-продукти."] as const,
+      ["travel", "Подорожі, туризм і локальні travel-сервіси."] as const,
+      ["tools", "Українські цифрові інструменти та сервіси."] as const,
+    ],
   );
   const map = new Map<string, CatalogCategory>();
   for (const product of products) {

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs xmlns="http://www.w3.org/2000/svg">
+    <radialGradient xmlns="http://www.w3.org/2000/svg" id="gph" cx="42%" cy="36%" r="80%">
+      <stop xmlns="http://www.w3.org/2000/svg" offset="0" stop-color="#1d2026"></stop>
+      <stop xmlns="http://www.w3.org/2000/svg" offset="1" stop-color="#131417"></stop>
+    </radialGradient>
+  </defs>
+  <rect xmlns="http://www.w3.org/2000/svg" width="512" height="512" fill="url(#gph)"></rect>
+  <g xmlns="http://www.w3.org/2000/svg" stroke="#D9D7D2" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path xmlns="http://www.w3.org/2000/svg" d="M296 118 H134 Q118 118 118 134 V378 Q118 394 134 394 H378 Q394 394 394 378 V134 Q394 118 378 118 H348"></path>
+    <line xmlns="http://www.w3.org/2000/svg" x1="296" y1="118" x2="324" y2="144"></line>
+  </g>
+  <g xmlns="http://www.w3.org/2000/svg">
+    <circle xmlns="http://www.w3.org/2000/svg" cx="342" cy="170" r="21" fill="#22C55E"></circle>
+    <circle xmlns="http://www.w3.org/2000/svg" cx="342" cy="226" r="21" fill="#22C55E"></circle>
+    <circle xmlns="http://www.w3.org/2000/svg" cx="342" cy="282" r="21" fill="#EAB308"></circle>
+    <circle xmlns="http://www.w3.org/2000/svg" cx="342" cy="338" r="21" fill="#F97316"></circle>
+    <circle xmlns="http://www.w3.org/2000/svg" cx="226" cy="170" r="21" fill="#EAB308"></circle>
+    <circle xmlns="http://www.w3.org/2000/svg" cx="170" cy="170" r="21" fill="#F97316"></circle>
+    <circle xmlns="http://www.w3.org/2000/svg" cx="170" cy="226" r="21" fill="#F97316"></circle>
+    <circle xmlns="http://www.w3.org/2000/svg" cx="170" cy="282" r="21" fill="#EF4444"></circle>
+    <circle xmlns="http://www.w3.org/2000/svg" cx="170" cy="338" r="21" fill="#EF4444"></circle>
+    <circle xmlns="http://www.w3.org/2000/svg" cx="226" cy="338" r="21" fill="#EF4444"></circle>
+    <circle xmlns="http://www.w3.org/2000/svg" cx="282" cy="338" r="21" fill="#EF4444"></circle>
+  </g>
+  <g xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#22D3EE" stroke-width="12" stroke-linecap="round">
+    <circle xmlns="http://www.w3.org/2000/svg" cx="256" cy="256" r="40"></circle>
+    <line xmlns="http://www.w3.org/2000/svg" x1="256" y1="186" x2="256" y2="204"></line>
+    <line xmlns="http://www.w3.org/2000/svg" x1="256" y1="308" x2="256" y2="326"></line>
+    <line xmlns="http://www.w3.org/2000/svg" x1="186" y1="256" x2="204" y2="256"></line>
+    <line xmlns="http://www.w3.org/2000/svg" x1="308" y1="256" x2="326" y2="256"></line>
+  </g>
+  <circle xmlns="http://www.w3.org/2000/svg" cx="256" cy="256" r="10" fill="#22D3EE"></circle>
+</svg>

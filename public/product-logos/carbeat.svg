@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="Carbeat map preview">
+  <defs xmlns="http://www.w3.org/2000/svg">
+    <linearGradient xmlns="http://www.w3.org/2000/svg" id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop xmlns="http://www.w3.org/2000/svg" stop-color="#e0f2fe"></stop>
+      <stop xmlns="http://www.w3.org/2000/svg" offset="0.45" stop-color="#f8fafc"></stop>
+      <stop xmlns="http://www.w3.org/2000/svg" offset="1" stop-color="#dcfce7"></stop>
+    </linearGradient>
+    <linearGradient xmlns="http://www.w3.org/2000/svg" id="pin" x1="0" y1="0" x2="1" y2="1">
+      <stop xmlns="http://www.w3.org/2000/svg" stop-color="#2563eb"></stop>
+      <stop xmlns="http://www.w3.org/2000/svg" offset="1" stop-color="#10b981"></stop>
+    </linearGradient>
+  </defs>
+  <rect xmlns="http://www.w3.org/2000/svg" width="1200" height="630" fill="url(#bg)"></rect>
+  <g xmlns="http://www.w3.org/2000/svg" opacity="0.28" stroke="#94a3b8" stroke-width="2">
+    <path xmlns="http://www.w3.org/2000/svg" d="M90 140h1020"></path>
+    <path xmlns="http://www.w3.org/2000/svg" d="M90 230h1020"></path>
+    <path xmlns="http://www.w3.org/2000/svg" d="M90 320h1020"></path>
+    <path xmlns="http://www.w3.org/2000/svg" d="M90 410h1020"></path>
+    <path xmlns="http://www.w3.org/2000/svg" d="M90 500h1020"></path>
+    <path xmlns="http://www.w3.org/2000/svg" d="M200 80v470"></path>
+    <path xmlns="http://www.w3.org/2000/svg" d="M390 80v470"></path>
+    <path xmlns="http://www.w3.org/2000/svg" d="M580 80v470"></path>
+    <path xmlns="http://www.w3.org/2000/svg" d="M770 80v470"></path>
+    <path xmlns="http://www.w3.org/2000/svg" d="M960 80v470"></path>
+  </g>
+  <rect xmlns="http://www.w3.org/2000/svg" x="84" y="72" width="1032" height="486" rx="32" fill="#ffffff" fill-opacity="0.72" stroke="#cbd5e1"></rect>
+  <g xmlns="http://www.w3.org/2000/svg" transform="translate(120 110)">
+    <text xmlns="http://www.w3.org/2000/svg" x="0" y="0" fill="#0f172a" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="700">Carbeat</text>
+    <text xmlns="http://www.w3.org/2000/svg" x="0" y="72" fill="#334155" font-family="Arial, Helvetica, sans-serif" font-size="34">Car service map, STO profiles, city and service pages.</text>
+    <text xmlns="http://www.w3.org/2000/svg" x="0" y="126" fill="#475569" font-family="Arial, Helvetica, sans-serif" font-size="26">Find nearby auto repair stations, compare ratings and open routes instantly.</text>
+  </g>
+  <g xmlns="http://www.w3.org/2000/svg" transform="translate(840 120)">
+    <path xmlns="http://www.w3.org/2000/svg" d="M120 10c-55.23 0-100 44.77-100 100 0 71.26 82.38 151.57 90.69 159.51a14.1 14.1 0 0 0 18.62 0C137.62 261.57 220 181.26 220 110c0-55.23-44.77-100-100-100Z" fill="url(#pin)"></path>
+    <circle xmlns="http://www.w3.org/2000/svg" cx="120" cy="110" r="42" fill="#f8fafc"></circle>
+    <rect xmlns="http://www.w3.org/2000/svg" x="70" y="290" width="100" height="16" rx="8" fill="#0f172a" fill-opacity="0.12"></rect>
+  </g>
+</svg>

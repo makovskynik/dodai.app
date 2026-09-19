@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080" fill="none">
+<rect xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" fill="#E5E7EB"></rect>
+<g xmlns="http://www.w3.org/2000/svg" clip-path="url(#clip0_489_117)">
+<path xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" d="M241 840L540 240L776 716H552L584 652H670L539 389L315 840H241Z" fill="#002184"></path>
+<path xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" d="M539 495L577 564L472 776H807L840 840H366L539 495Z" fill="#FCCC00"></path>
+</g>
+<defs xmlns="http://www.w3.org/2000/svg">
+<clipPath xmlns="http://www.w3.org/2000/svg" id="clip0_489_117">
+<rect xmlns="http://www.w3.org/2000/svg" width="600" height="600" fill="white" transform="translate(240 240)"></rect>
+</clipPath>
+</defs>
+</svg>
