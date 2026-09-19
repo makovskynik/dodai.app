@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { MapLegend } from "@/components/domain/MapLegend";
 import { ProductLogo } from "@/components/domain/ProductLogo";
 import {
   UkraineMapSvg,
@@ -21,15 +20,8 @@ const MAX_ZOOM = 2.8;
 
 type MapExplorerProps = {
   clusters: MapCluster[];
-  unlocated: CatalogProduct[];
   logoSlugs: string[];
   largeSlugs: string[];
-};
-
-type CategoryChip = {
-  slug: string;
-  name: string;
-  count: number;
 };
 
 function ProductPreviewRow({
@@ -86,7 +78,6 @@ function clampZoom(value: number) {
 
 export function MapExplorer({
   clusters,
-  unlocated,
   logoSlugs,
   largeSlugs,
 }: MapExplorerProps) {
@@ -116,39 +107,6 @@ export function MapExplorer({
   useEffect(() => {
     setFocus(clampMapFocus(defaultFocus.x, defaultFocus.y, 1));
   }, [defaultFocus.x, defaultFocus.y]);
-
-  const categories = useMemo(() => {
-    const map = new Map<string, CategoryChip>();
-    for (const cluster of clusters) {
-      for (const product of cluster.products) {
-        const current = map.get(product.categorySlug);
-        if (current) {
-          current.count += 1;
-        } else {
-          map.set(product.categorySlug, {
-            slug: product.categorySlug,
-            name: product.categoryName,
-            count: 1,
-          });
-        }
-      }
-    }
-    for (const product of unlocated) {
-      const current = map.get(product.categorySlug);
-      if (current) {
-        current.count += 1;
-      } else {
-        map.set(product.categorySlug, {
-          slug: product.categorySlug,
-          name: product.categoryName,
-          count: 1,
-        });
-      }
-    }
-    return [...map.values()]
-      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, "uk"))
-      .slice(0, 8);
-  }, [clusters, unlocated]);
 
   const activeCluster =
     clusters.find((cluster) => cluster.city.slug === activeCitySlug) ?? null;
@@ -200,37 +158,7 @@ export function MapExplorer({
   const zoomLabel = `${zoom.toFixed(1)}×`;
 
   return (
-    <div className="space-y-5">
-      {categories.length > 0 ? (
-        <div className="flex flex-wrap gap-2" aria-label="Категорії на мапі">
-          {categories.map((category) => (
-            <Link
-              key={category.slug}
-              href={`/products?category=${encodeURIComponent(category.slug)}`}
-              className="inline-flex min-h-10 items-center rounded-pill border border-line bg-surface px-3.5 text-sm text-ink hover:bg-copper-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper"
-            >
-              {category.name}
-              <span className="font-mono-meta ml-2 text-[10px] text-ink/45">
-                {category.count}
-              </span>
-            </Link>
-          ))}
-          <Link
-            href="/products"
-            className="inline-flex min-h-10 items-center rounded-pill border border-dashed border-line px-3.5 text-sm text-ink/70 hover:bg-copper-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper"
-          >
-            Увесь каталог
-          </Link>
-        </div>
-      ) : null}
-
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <MapLegend />
-        <p className="font-mono-meta text-[10px] uppercase text-ink/45">
-          Перетягніть · щипок · {zoomLabel}
-        </p>
-      </div>
-
+    <div className="space-y-4">
       <div
         className="relative mx-auto w-full max-w-[820px] overflow-hidden"
         aria-label="Інтерактивна мапа"
@@ -298,6 +226,16 @@ export function MapExplorer({
           />
         </div>
       </div>
+
+      <p className="text-center text-sm text-ink/50">
+        Більший логотип — платне місце на мапі.{" "}
+        <Link
+          href="/pricing"
+          className="text-ink/70 underline-offset-2 hover:text-ink hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper"
+        >
+          Тарифи
+        </Link>
+      </p>
 
       <ul className="sr-only">
         {clusters.map((cluster) => (

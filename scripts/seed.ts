@@ -109,7 +109,7 @@ async function main() {
           sameAs: product.sameAs,
           lastVerifiedAt: product.lastVerifiedAt
             ? new Date(product.lastVerifiedAt)
-            : new Date(),
+            : null,
           status: "active",
           sourceType: "editorial",
           claimable: product.claimable,
@@ -142,7 +142,7 @@ async function main() {
           sameAs: product.sameAs,
           lastVerifiedAt: product.lastVerifiedAt
             ? new Date(product.lastVerifiedAt)
-            : new Date(),
+            : null,
           status: "active",
           sourceType: "editorial",
           claimable: product.claimable,

@@ -63,6 +63,7 @@ export type CatalogQuery = {
   category?: string;
   platform?: string;
   sort?: "new" | "name";
+  page?: number;
 };
 
 export type CatalogResult = {

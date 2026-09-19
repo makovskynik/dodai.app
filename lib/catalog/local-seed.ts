@@ -234,18 +234,6 @@ const TAGLINE_UK: Record<string, string> = {
 
 const EDITORIAL_DAY = "serpstat";
 
-/** Demo city rotation for map clusters (seed only; owners set city later). */
-const SEED_CITIES = [
-  "Київ",
-  "Львів",
-  "Харків",
-  "Одеса",
-  "Дніпро",
-  "Вінниця",
-  "Івано-Франківськ",
-  null,
-] as const;
-
 function slugify(value: string): string {
   return value
     .normalize("NFKD")
@@ -271,14 +259,65 @@ function initialsFromName(name: string): string {
   return `${parts[0][0] ?? ""}${parts[1][0] ?? ""}`.slice(0, 2);
 }
 
+function scrubImportedCopy(raw: string | null | undefined): string | null {
+  if (!raw) return null;
+  let text = raw
+    .replace(/\s*Explore\b[\s\S]*?\bon Osyo!\s*/gi, " ")
+    .replace(/\s*Explore\b[\s\S]*$/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!text) return null;
+  if (/osyo\.app|імпортовано з каталогу|claim відкритий/i.test(text)) {
+    return null;
+  }
+
+  if (text.endsWith("…") || text.endsWith("...")) {
+    const withoutEllipsis = text.replace(/(\.\.\.|…)+$/u, "").trim();
+    // Truncated marketing copy — leave blank for the owner to fill.
+    if (!/[.!?)»”"]$/u.test(withoutEllipsis)) {
+      return null;
+    }
+    text = withoutEllipsis;
+  }
+
+  if (text.length < 24) return null;
+  return text;
+}
+
+function minimalTagline(
+  cleanedTagline: string | null,
+  cleanedDescription: string | null,
+  categoryName: string,
+  name: string,
+): string {
+  const source = cleanedTagline ?? cleanedDescription;
+  if (source) {
+    const firstSentence = source.split(/(?<=[.!?])\s+/u)[0] ?? source;
+    return firstSentence.slice(0, 120);
+  }
+  return (categoryName || name).slice(0, 120);
+}
+
+function sameAsForWebsite(website: string | null | undefined): string[] {
+  if (!website) return [];
+  try {
+    const host = new URL(website).hostname.replace(/^www\./, "").toLowerCase();
+    if (host === "osyo.app" || host.endsWith(".osyo.app")) return [];
+    return [website];
+  } catch {
+    return [];
+  }
+}
+
 function shortTagline(item: MarketerSeedItem): string {
   const mapped = TAGLINE_UK[item.name];
   if (mapped) return mapped.slice(0, 120);
-  const fromShort = item.short_uk?.trim();
+  const fromShort = scrubImportedCopy(item.short_uk);
   if (fromShort) return fromShort.slice(0, 120);
-  const fromDesc = (item.description ?? "").replace(/\s+/g, " ").trim();
-  if (!fromDesc) return "Український цифровий продукт.";
-  return fromDesc.length > 120 ? `${fromDesc.slice(0, 117)}…` : fromDesc;
+  const fromDesc = scrubImportedCopy(item.description);
+  if (fromDesc) return fromDesc.slice(0, 120);
+  return "Український цифровий продукт";
 }
 
 function buildMarketerProducts(): CatalogProduct[] {
@@ -294,16 +333,17 @@ function buildMarketerProducts(): CatalogProduct[] {
       };
       const platforms = normalizePlatforms(PLATFORM_OVERRIDES[slug] ?? ["web"]);
       const badge: ProductBadge = null;
-      const cityLabel = SEED_CITIES[index % SEED_CITIES.length] ?? null;
+      const description = scrubImportedCopy(item.description);
+      const tagline = shortTagline(item);
 
       return {
         id: slug,
         slug,
         name: item.name,
-        tagline: shortTagline(item),
-        description: item.description,
+        tagline,
+        description,
         seoTitle: `${item.name} — український цифровий продукт`,
-        seoDescription: shortTagline(item),
+        seoDescription: tagline,
         categorySlug: category.slug,
         categoryName: category.nameUk,
         platforms,
@@ -317,11 +357,10 @@ function buildMarketerProducts(): CatalogProduct[] {
         claimable: Boolean(item.claimable),
         pricingModel: null,
         hasUkrainianUi: null,
-        cityLabel,
-        ukraineNote:
-          "Українські засновники або значуща українська команда (редакційний seed; claim відкритий).",
-        sameAs: [item.website],
-        lastVerifiedAt: new Date(Date.UTC(2026, 8, 18)).toISOString(),
+        cityLabel: null,
+        ukraineNote: null,
+        sameAs: sameAsForWebsite(item.website),
+        lastVerifiedAt: null,
         publishedAt: new Date(Date.UTC(2026, 8, 18 - (index % 10))).toISOString(),
         listingTier: "free" as const,
         extraLinks: [],
@@ -334,44 +373,49 @@ function buildMarketerProducts(): CatalogProduct[] {
     });
 }
 
-function buildOsyoProducts(startIndex: number): CatalogProduct[] {
+function buildOsyoProducts(): CatalogProduct[] {
   const items = osyoSeed as OsyoSeedItem[];
   return items
     .filter((item) => item.seed_for_dodai !== false && !item.missingWebsite)
     .map((item, index) => {
       const slug = item.slug || slugify(item.name);
-      const cityLabel =
-        SEED_CITIES[(startIndex + index) % SEED_CITIES.length] ?? null;
-      const sameAs = [item.website, item.sourceUrl].filter(Boolean) as string[];
+      const description = scrubImportedCopy(item.description);
+      const cleanedTagline = scrubImportedCopy(item.tagline);
+      const tagline = minimalTagline(
+        cleanedTagline,
+        description,
+        item.categoryName || "Інструменти",
+        item.name,
+      );
+      const website = item.website;
 
       return {
         id: slug,
         slug,
         name: item.name,
-        tagline: (item.tagline || "Український цифровий продукт.").slice(0, 120),
-        description: item.description,
+        tagline,
+        description,
         seoTitle: `${item.name} — український цифровий продукт`,
-        seoDescription: (item.tagline || item.description || "").slice(0, 160),
+        seoDescription: tagline.slice(0, 160),
         categorySlug: item.categorySlug || "tools",
         categoryName: item.categoryName || "Інструменти",
         platforms: normalizePlatforms(item.platforms ?? ["web"]),
-        website: item.website,
-        domain: item.domain ?? domainFromUrl(item.website),
+        website,
+        domain: item.domain ?? domainFromUrl(website),
         initials: initialsFromName(item.name),
         logoUrl: item.logoUrl ?? logoUrlForSlug(slug),
-        surface: SURFACES[(startIndex + index) % SURFACES.length],
+        surface: SURFACES[index % SURFACES.length],
         badge: null as ProductBadge,
         sourceType: "editorial" as const,
         claimable: item.claimable !== false,
         pricingModel: null,
         hasUkrainianUi: null,
-        cityLabel,
-        ukraineNote:
-          "Імпортовано з каталогу Osyo з дозволу. Український цифровий продукт; claim відкритий.",
-        sameAs,
-        lastVerifiedAt: new Date(Date.UTC(2026, 8, 19)).toISOString(),
+        cityLabel: null,
+        ukraineNote: null,
+        sameAs: sameAsForWebsite(website),
+        lastVerifiedAt: null,
         publishedAt: new Date(
-          Date.UTC(2026, 8, 19 - ((startIndex + index) % 14)),
+          Date.UTC(2026, 8, 19 - (index % 14)),
         ).toISOString(),
         listingTier: "free" as const,
         extraLinks: [],
@@ -410,7 +454,7 @@ function mergeCatalogProducts(
 
 function buildLocalCatalog(): CatalogProduct[] {
   const marketer = buildMarketerProducts();
-  const osyo = buildOsyoProducts(marketer.length);
+  const osyo = buildOsyoProducts();
   return mergeCatalogProducts(marketer, osyo);
 }
 

@@ -7,6 +7,7 @@ import {
   recordZeroResultSearch,
 } from "@/lib/catalog/queries";
 import type { CatalogQuery } from "@/lib/catalog/types";
+import { parsePageParam } from "@/lib/catalog/pagination";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 
 type PageProps = {
@@ -22,11 +23,13 @@ function parseQuery(
   };
 
   const sort = read("sort");
+  const page = parsePageParam(params.page);
   return {
     q: read("q"),
     category: read("category"),
     platform: read("platform"),
     sort: sort === "name" ? "name" : "new",
+    page: page > 1 ? page : undefined,
   };
 }
 
@@ -34,7 +37,9 @@ export async function generateMetadata({
   searchParams,
 }: PageProps): Promise<Metadata> {
   const query = parseQuery(await searchParams);
-  const hasFilters = Boolean(query.q || query.category || query.platform);
+  const hasFilters = Boolean(
+    query.q || query.category || query.platform || (query.page && query.page > 1),
+  );
 
   return buildPageMetadata({
     title: "Каталог українських цифрових продуктів",

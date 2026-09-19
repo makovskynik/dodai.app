@@ -20,6 +20,7 @@ function hrefFor(next: CatalogQuery): string {
   if (next.category) params.set("category", next.category);
   if (next.platform) params.set("platform", next.platform);
   if (next.sort && next.sort !== "new") params.set("sort", next.sort);
+  // Filter changes always reset to page 1 — omit page param.
   const qs = params.toString();
   return qs ? `/products?${qs}` : "/products";
 }

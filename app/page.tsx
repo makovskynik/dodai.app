@@ -1,25 +1,59 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { DodaiLogo } from "@/components/domain/DodaiLogo";
 import { LinkButton } from "@/components/ui/Button";
+import { Pagination } from "@/components/ui/Pagination";
 import { HomeJsonLd } from "@/components/seo/JsonLd";
 import { CompactProductOfDay } from "@/features/home/CompactProductOfDay";
 import { HomeTaskSearch } from "@/features/home/HomeTaskSearch";
 import { ProductCard } from "@/components/domain/ProductCard";
 import { getCatalog, getProductOfTheDay } from "@/lib/catalog/queries";
+import {
+  paginateItems,
+  parsePageParam,
+} from "@/lib/catalog/pagination";
 import { EDITORIAL_COLLECTIONS } from "@/lib/geo/collections";
-import { homeMetadata } from "@/lib/seo/metadata";
+import { buildPageMetadata, homeMetadata } from "@/lib/seo/metadata";
 
-export const metadata = homeMetadata();
+type PageProps = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
 
-export default async function HomePage() {
+export async function generateMetadata({
+  searchParams,
+}: PageProps): Promise<Metadata> {
+  const page = parsePageParam((await searchParams).page);
+  if (page > 1) {
+    return buildPageMetadata({
+      title: "dodai.app — каталог українських цифрових продуктів",
+      description:
+        "Каталог українських сервісів і застосунків. Пошук за задачею, голоси незалежні від оплати.",
+      path: "/",
+      noIndex: true,
+    });
+  }
+  return homeMetadata();
+}
+
+function homeHrefForPage(page: number): string {
+  if (page <= 1) return "/#catalog";
+  return `/?page=${page}#catalog`;
+}
+
+export default async function HomePage({ searchParams }: PageProps) {
+  const pageParam = parsePageParam((await searchParams).page);
   const [catalog, productOfDay] = await Promise.all([
     getCatalog({ sort: "new" }),
     getProductOfTheDay(),
   ]);
 
-  const organic = catalog.organic.slice(0, 6);
+  const organicPage = paginateItems(catalog.organic, pageParam);
+  const organic = organicPage.items;
   const promoted = catalog.promoted;
-  const jsonLdProducts = [...catalog.organic, ...catalog.promoted];
+  const jsonLdProducts =
+    organicPage.page === 1
+      ? [...organic, ...promoted]
+      : [...organic];
   const bridgeCategories = catalog.categories
     .slice()
     .sort((a, b) => b.count - a.count)
@@ -83,7 +117,10 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1440px] px-4 py-14 sm:px-6 lg:px-8">
+      <section
+        id="catalog"
+        className="mx-auto max-w-[1440px] scroll-mt-24 px-4 py-14 sm:px-6 lg:px-8"
+      >
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
             <h2 className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
@@ -103,6 +140,17 @@ export default async function HomePage() {
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
+
+        {organicPage.totalPages > 1 ? (
+          <div className="mt-10">
+            <Pagination
+              page={organicPage.page}
+              totalPages={organicPage.totalPages}
+              hrefForPage={homeHrefForPage}
+              label="Сторінки нових у каталозі"
+            />
+          </div>
+        ) : null}
 
         {bridgeCategories.length > 0 ? (
           <div className="mt-10 border-t border-line pt-8">

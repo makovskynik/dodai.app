@@ -1,13 +1,15 @@
 import Link from "next/link";
 import { ProductCard } from "@/components/domain/ProductCard";
 import { CatalogFilters } from "@/components/domain/CatalogFilters";
+import { Pagination } from "@/components/ui/Pagination";
 import { SearchField } from "@/components/ui/SearchField";
 import {
   EDITORIAL_COLLECTIONS,
   getCollectionBySlug,
   suggestCollectionsForQuery,
 } from "@/lib/geo/collections";
-import type { CatalogResult } from "@/lib/catalog/types";
+import { paginateItems } from "@/lib/catalog/pagination";
+import type { CatalogQuery, CatalogResult } from "@/lib/catalog/types";
 
 type CatalogViewProps = {
   catalog: CatalogResult;
@@ -22,9 +24,22 @@ function formatFoundLabel(count: number): string {
   return `Знайдено ${count} продуктів`;
 }
 
+function productsHrefForPage(query: CatalogQuery, page: number): string {
+  const params = new URLSearchParams();
+  if (query.q) params.set("q", query.q);
+  if (query.category) params.set("category", query.category);
+  if (query.platform) params.set("platform", query.platform);
+  if (query.sort && query.sort !== "new") params.set("sort", query.sort);
+  if (page > 1) params.set("page", String(page));
+  const qs = params.toString();
+  return qs ? `/products?${qs}` : "/products";
+}
+
 export function CatalogView({ catalog }: CatalogViewProps) {
   const { organic, promoted, categories, platforms, query, total, zeroResult } =
     catalog;
+
+  const organicPage = paginateItems(organic, query.page ?? 1);
 
   const suggested = query.q
     ? suggestCollectionsForQuery(query.q)
@@ -107,10 +122,21 @@ export function CatalogView({ catalog }: CatalogViewProps) {
               </h2>
             ) : null}
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {organic.map((product) => (
+              {organicPage.items.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
+
+            {organicPage.totalPages > 1 ? (
+              <div className="mt-10">
+                <Pagination
+                  page={organicPage.page}
+                  totalPages={organicPage.totalPages}
+                  hrefForPage={(page) => productsHrefForPage(query, page)}
+                  label="Сторінки каталогу"
+                />
+              </div>
+            ) : null}
           </section>
         </>
       )}

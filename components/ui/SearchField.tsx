@@ -30,6 +30,7 @@ export function SearchField({
       const trimmed = nextValue.trim();
       if (trimmed) params.set(name, trimmed);
       else params.delete(name);
+      params.delete("page");
 
       trackEvent("search_submitted", {
         q: trimmed || null,
@@ -38,7 +39,8 @@ export function SearchField({
       });
 
       startTransition(() => {
-        router.push(`/products?${params.toString()}`);
+        const qs = params.toString();
+        router.push(qs ? `/products?${qs}` : "/products");
       });
     },
     [name, router, searchParams],

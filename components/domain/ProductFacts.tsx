@@ -38,11 +38,15 @@ export function ProductFacts({ product }: ProductFactsProps) {
     { label: "Місто / команда", value: product.cityLabel ?? "Не вказано" },
     {
       label: "Звʼязок з Україною",
-      value: product.ukraineNote ?? "Українська команда або засновники (редакційна перевірка).",
+      value: product.ukraineNote?.trim()
+        ? product.ukraineNote
+        : product.claimable
+          ? "Не вказано. Власник може доповнити після claim."
+          : "Не вказано",
     },
     {
       label: "Перевірено",
-      value: formatDate(product.lastVerifiedAt ?? product.publishedAt),
+      value: formatDate(product.lastVerifiedAt),
     },
     { label: "Домен", value: product.domain ?? "—" },
   ];
