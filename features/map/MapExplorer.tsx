@@ -16,7 +16,6 @@ import { Dialog } from "@/components/ui/Dialog";
 import type { CatalogProduct } from "@/lib/catalog/types";
 import type { MapCluster } from "@/lib/map/cluster";
 
-const PREVIEW_LIMIT = 5;
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 2.8;
 
@@ -154,14 +153,6 @@ export function MapExplorer({
   const activeCluster =
     clusters.find((cluster) => cluster.city.slug === activeCitySlug) ?? null;
 
-  const previewProducts = activeCluster
-    ? activeCluster.products.slice(0, PREVIEW_LIMIT)
-    : [];
-  const remaining =
-    activeCluster && activeCluster.products.length > PREVIEW_LIMIT
-      ? activeCluster.products.length - PREVIEW_LIMIT
-      : 0;
-
   function openCity(citySlug: string) {
     setEmptyOblastName(null);
     setActiveCitySlug(citySlug);
@@ -240,11 +231,14 @@ export function MapExplorer({
         </p>
       </div>
 
-      <div className="relative mx-auto w-full max-w-[820px] overflow-hidden rounded-card border border-line bg-canvas shadow-soft">
-        <div className="absolute right-3 top-3 z-10 flex gap-1">
+      <div
+        className="relative mx-auto w-full max-w-[820px] overflow-hidden"
+        aria-label="Інтерактивна мапа"
+      >
+        <div className="absolute right-0 top-0 z-10 flex gap-1 rounded-pill border border-line bg-surface/95 p-1 shadow-soft">
           <Button
             type="button"
-            variant="secondary"
+            variant="ghost"
             size="sm"
             aria-label="Віддалити"
             className="min-h-10 min-w-10 px-0"
@@ -255,7 +249,7 @@ export function MapExplorer({
           </Button>
           <Button
             type="button"
-            variant="secondary"
+            variant="ghost"
             size="sm"
             aria-label="Наблизити"
             className="min-h-10 min-w-10 px-0"
@@ -287,6 +281,11 @@ export function MapExplorer({
             focusY={focus.y}
             onOpenCity={openCity}
             onOpenProduct={(product) => {
+              if (!product.slug) {
+                return;
+              }
+              setActiveCitySlug(null);
+              setEmptyOblastName(null);
               router.push(`/products/${product.slug}`);
             }}
             onEmptyOblast={(nameUk) => {
@@ -337,7 +336,7 @@ export function MapExplorer({
       >
         {activeCluster ? (
           <ul className="space-y-3">
-            {previewProducts.map((product) => {
+            {activeCluster.products.map((product) => {
               const tier = largeSet.has(product.slug)
                 ? 3
                 : logoSet.has(product.slug)
@@ -351,11 +350,6 @@ export function MapExplorer({
                 />
               );
             })}
-            {remaining > 0 ? (
-              <li className="text-sm text-ink/60">
-                Ще {remaining} у каталозі за запитом «{activeCluster.city.nameUk}».
-              </li>
-            ) : null}
           </ul>
         ) : null}
       </Dialog>

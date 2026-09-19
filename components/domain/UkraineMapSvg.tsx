@@ -341,38 +341,84 @@ export function UkraineMapSvg({
         </text>
       </g>
 
-      {clusters.map((cluster) => (
-        <g key={cluster.city.slug}>
-          <text
-            x={cluster.city.x}
-            y={cluster.city.y - (cluster.products.length > 1 ? 48 : 36)}
-            textAnchor="middle"
-            fill="var(--ink)"
-            fillOpacity="0.55"
-            fontSize={11}
-            fontFamily="Geologica, sans-serif"
-            fontWeight="500"
-            className="pointer-events-none select-none"
-          >
-            {cluster.city.nameUk}
-          </text>
-          {(() => {
-            const ranked = [...cluster.products]
-              .map((product) => ({
-                product,
-                tier: resolveMapMarkerTier(
-                  product.slug,
-                  logoSlugs,
-                  largeSlugs,
-                ),
-              }))
-              .sort((a, b) => a.tier - b.tier || a.product.slug.localeCompare(b.product.slug));
-            const maxTier = ranked.reduce(
-              (max, item) => (item.tier > max ? item.tier : max),
-              1 as MapMarkerTier,
-            );
+      {clusters.map((cluster) => {
+        const ranked = [...cluster.products]
+          .map((product) => ({
+            product,
+            tier: resolveMapMarkerTier(
+              product.slug,
+              logoSlugs,
+              largeSlugs,
+            ),
+          }))
+          .sort(
+            (a, b) =>
+              a.tier - b.tier || a.product.slug.localeCompare(b.product.slug),
+          );
+        const maxTier = ranked.reduce(
+          (max, item) => (item.tier > max ? item.tier : max),
+          1 as MapMarkerTier,
+        );
+        const cityHitRadius = Math.max(
+          18,
+          10 + Math.sqrt(ranked.length) * (maxTier >= 3 ? 14 : maxTier >= 2 ? 10 : 7),
+        );
 
-            return ranked.map(({ product, tier }, index) => {
+        return (
+          <g key={cluster.city.slug}>
+            <circle
+              cx={cluster.city.x}
+              cy={cluster.city.y}
+              r={cityHitRadius}
+              fill="transparent"
+              className="cursor-pointer"
+              role="button"
+              tabIndex={0}
+              aria-label={`${cluster.city.nameUk}: усі продукти`}
+              onClick={(event) => {
+                event.stopPropagation();
+                if (suppressClickRef.current) return;
+                onOpenCity(cluster.city.slug);
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  onOpenCity(cluster.city.slug);
+                }
+              }}
+            >
+              <title>
+                {`${cluster.city.nameUk} · ${cluster.products.length} продуктів`}
+              </title>
+            </circle>
+            <text
+              x={cluster.city.x}
+              y={cluster.city.y - (cluster.products.length > 1 ? 48 : 36)}
+              textAnchor="middle"
+              fill="var(--ink)"
+              fillOpacity="0.55"
+              fontSize={11}
+              fontFamily="Geologica, sans-serif"
+              fontWeight="500"
+              className="cursor-pointer select-none"
+              role="button"
+              tabIndex={0}
+              aria-label={`${cluster.city.nameUk}: усі продукти`}
+              onClick={(event) => {
+                event.stopPropagation();
+                if (suppressClickRef.current) return;
+                onOpenCity(cluster.city.slug);
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  onOpenCity(cluster.city.slug);
+                }
+              }}
+            >
+              {cluster.city.nameUk}
+            </text>
+            {ranked.map(({ product, tier }, index) => {
               const { dx, dy } = productOffset(
                 ranked.length,
                 index,
@@ -397,13 +443,7 @@ export function UkraineMapSvg({
                   className="cursor-pointer"
                   role="button"
                   tabIndex={0}
-                  aria-label={
-                    tier === 1
-                      ? `${product.name}, малий логотип на мапі`
-                      : tier === 2
-                        ? `${product.name}, логотип на мапі`
-                        : `${product.name}, великий логотип на мапі`
-                  }
+                  aria-label={`${product.name} — відкрити сторінку продукту`}
                   onClick={(event) => {
                     event.stopPropagation();
                     if (suppressClickRef.current) return;
@@ -432,6 +472,7 @@ export function UkraineMapSvg({
                       height={logoHalf * 2}
                       clipPath={clip}
                       preserveAspectRatio="xMidYMid meet"
+                      pointerEvents="none"
                     />
                   ) : (
                     <text
@@ -441,25 +482,18 @@ export function UkraineMapSvg({
                       fontSize={fontSize}
                       fontFamily="Geologica, sans-serif"
                       fontWeight="600"
+                      pointerEvents="none"
                     >
                       {product.initials}
                     </text>
                   )}
-                  <title>
-                    {`${product.name}${
-                      tier === 3
-                        ? " · великий логотип"
-                        : tier === 2
-                          ? " · логотип"
-                          : ""
-                    }`}
-                  </title>
+                  <title>{`${product.name} — відкрити`}</title>
                 </g>
               );
-            });
-          })()}
-        </g>
-      ))}
+            })}
+          </g>
+        );
+      })}
     </svg>
   );
 }
