@@ -20,9 +20,19 @@ type ProductCardProps = {
   };
 };
 
+const CATEGORY_LABEL_UK: Record<string, string> = {
+  Software: "Софт",
+  Influencer: "Інфлюенсери",
+  SEO: "SEO",
+  CRM: "CRM",
+  AI: "AI",
+  EdTech: "EdTech",
+};
+
 function formatCardMeta(categoryName: string, platforms: string[]): string {
+  const category = CATEGORY_LABEL_UK[categoryName] ?? categoryName;
   const limitedPlatforms = platforms.slice(0, 2).map(platformLabel);
-  return [categoryName, ...limitedPlatforms].filter(Boolean).join(" · ");
+  return [category, ...limitedPlatforms].filter(Boolean).join(" · ");
 }
 
 export function ProductCard({ product, href, vote }: ProductCardProps) {
@@ -42,10 +52,10 @@ export function ProductCard({ product, href, vote }: ProductCardProps) {
 
   return (
     <article
-      className={`group relative flex h-full flex-col rounded-card border p-6 shadow-soft transition-colors ${
+      className={`group relative flex h-full flex-col rounded-card border bg-surface p-6 transition-[border-color,box-shadow] hover:shadow-soft ${
         isVerified
-          ? "border-mint bg-mint/30 hover:border-success/35 hover:bg-mint/45"
-          : "border-line bg-surface hover:border-ink/20 hover:bg-canvas/40"
+          ? "border-mint hover:border-success/40"
+          : "border-line hover:border-ink/20"
       }`}
     >
       <div className="relative z-10 mb-4 flex items-start justify-between gap-3">
@@ -66,6 +76,7 @@ export function ProductCard({ product, href, vote }: ProductCardProps) {
               voteCount={showVote.voteCount}
               hasVoted={showVote.hasVoted}
               turnstileSiteKey={turnstileSiteKey}
+              compact
             />
           ) : null}
         </div>
@@ -80,13 +91,16 @@ export function ProductCard({ product, href, vote }: ProductCardProps) {
         </Link>
       </h3>
 
-      <p className="mt-2 flex-1 text-[15px] leading-snug text-ink/80">
+      <p className="mt-2 line-clamp-2 flex-1 text-[15px] leading-snug text-ink/80">
         {product.tagline}
       </p>
 
       <div className="relative z-10 mt-5 flex items-center justify-between gap-3 pointer-events-none">
         <p className="font-mono-meta text-xs text-ink/65">{meta}</p>
-        <span className="inline-flex min-h-11 items-center rounded-pill px-3 text-sm font-medium text-copper-dark group-hover:bg-copper-soft">
+        <span
+          className="inline-flex min-h-11 items-center rounded-pill px-3 text-sm font-medium text-copper-dark opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100"
+          aria-hidden="true"
+        >
           Відкрити ↗
         </span>
       </div>

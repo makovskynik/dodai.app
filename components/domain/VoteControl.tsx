@@ -11,6 +11,8 @@ type VoteControlProps = {
   hasVoted: boolean;
   /** When set, Cloudflare Turnstile is shown before first vote. */
   turnstileSiteKey?: string | null;
+  /** Catalog density: ↑ N only; full label stays in aria-label. */
+  compact?: boolean;
 };
 
 export function VoteControl({
@@ -18,6 +20,7 @@ export function VoteControl({
   voteCount: initialCount,
   hasVoted: initialVoted,
   turnstileSiteKey = null,
+  compact = false,
 }: VoteControlProps) {
   const router = useRouter();
   const [voteCount, setVoteCount] = useState(initialCount);
@@ -96,17 +99,19 @@ export function VoteControl({
             ? `Ви вже проголосували. Зараз ${voteCount} голосів`
             : `Проголосувати. Зараз ${voteCount} голосів`
         }
-        className={`relative z-20 inline-flex min-h-11 items-center gap-2 rounded-pill border px-3 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:cursor-not-allowed disabled:opacity-60 ${
+        className={`relative z-20 inline-flex min-h-11 items-center gap-1.5 rounded-pill border px-3 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:cursor-not-allowed ${
           hasVoted
-            ? "border-mint bg-mint text-ink"
-            : "border-line bg-surface text-ink hover:bg-copper-soft active:bg-copper-soft"
+            ? "border-mint bg-mint/50 text-ink"
+            : "border-line bg-surface text-ink hover:bg-copper-soft active:bg-copper-soft disabled:opacity-60"
         }`}
       >
         <span aria-hidden="true">↑</span>
         <b className="font-semibold tabular-nums">{voteCount}</b>
-        <span className="font-mono-meta text-[10px] uppercase tracking-[0.04em] text-ink/55">
-          {hasVoted ? "Ваш голос" : isPending ? "…" : "Голос"}
-        </span>
+        {compact ? null : (
+          <span className="font-mono-meta text-[10px] uppercase tracking-[0.04em] text-ink/55">
+            {hasVoted ? "Ваш голос" : isPending ? "…" : "Голос"}
+          </span>
+        )}
       </button>
       {showCaptcha && turnstileSiteKey && !hasVoted ? (
         <div className="relative z-20 space-y-2">

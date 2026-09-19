@@ -108,7 +108,7 @@ const KIND_TO_CATEGORY: Record<
   },
   software: {
     slug: "software",
-    nameUk: "Software",
+    nameUk: "Софт",
     introUk: "Десктопні та кросплатформені софт-продукти.",
   },
   localization: {

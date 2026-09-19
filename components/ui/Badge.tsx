@@ -39,7 +39,11 @@ export function ProductDayBadge() {
 }
 
 export function VerifiedBadge() {
-  return <Badge tone="success">Підтверджено</Badge>;
+  return (
+    <Badge tone="neutral" className="border-mint bg-mint/40 text-ink">
+      Підтверджено
+    </Badge>
+  );
 }
 
 export function ProductWeekBadge() {
