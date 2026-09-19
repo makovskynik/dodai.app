@@ -38,6 +38,10 @@ export function ProductDayBadge() {
   return <Badge tone="editorial">Продукт тижня</Badge>;
 }
 
+export function VerifiedBadge() {
+  return <Badge tone="success">Підтверджено</Badge>;
+}
+
 export function ProductWeekBadge() {
   return <ProductDayBadge />;
 }

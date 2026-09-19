@@ -128,11 +128,6 @@ export function VoteControl({
           {error}
         </p>
       ) : null}
-      {!hasVoted && !showCaptcha ? (
-        <p className="font-mono-meta text-[10px] uppercase text-ink/45">
-          Без реєстрації
-        </p>
-      ) : null}
     </div>
   );
 }

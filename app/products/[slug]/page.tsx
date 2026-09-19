@@ -6,7 +6,7 @@ import { ProductLogo } from "@/components/domain/ProductLogo";
 import { RelatedProducts } from "@/components/domain/RelatedProducts";
 import { VoteControl } from "@/components/domain/VoteControl";
 import { TrackOnMount } from "@/components/analytics/TrackOnMount";
-import { Badge, PlacementBadge, ProductDayBadge } from "@/components/ui/Badge";
+import { Badge, PlacementBadge, ProductDayBadge, VerifiedBadge } from "@/components/ui/Badge";
 import { LinkButton } from "@/components/ui/Button";
 import { ProductJsonLd } from "@/components/seo/JsonLd";
 import { ClaimForm } from "@/features/claim/ClaimForm";
@@ -132,8 +132,9 @@ export default async function ProductPage({ params }: PageProps) {
         />
         {product.badge === "product-of-the-day" ? <ProductDayBadge /> : null}
         {product.badge === "promoted" ? <PlacementBadge /> : null}
+        {product.lastVerifiedAt ? <VerifiedBadge /> : null}
         {isPassport ? <Badge tone="editorial">Повна картка</Badge> : null}
-        {product.sourceType === "editorial" ? (
+        {product.sourceType === "editorial" && !product.lastVerifiedAt ? (
           <Badge>Додано редакцією</Badge>
         ) : null}
         <Badge>{product.categoryName}</Badge>
