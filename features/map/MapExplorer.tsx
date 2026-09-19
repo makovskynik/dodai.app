@@ -181,7 +181,9 @@ export function MapExplorer({
   function adjustZoom(delta: number) {
     setZoom((current) => {
       const next = clampZoom(current + delta);
-      setFocus((point) => clampMapFocus(point.x, point.y, next));
+      queuePromise.resolve().then(() => {
+        setFocus((point) => clampMapFocus(point.x, point.y, next));
+      });
       return next;
     });
   }
@@ -189,7 +191,9 @@ export function MapExplorer({
   function zoomByFactor(factor: number) {
     setZoom((current) => {
       const next = clampZoom(current * factor);
-      setFocus((point) => clampMapFocus(point.x, point.y, next));
+      queuePromise.resolve().then(() => {
+        setFocus((point) => clampMapFocus(point.x, point.y, next));
+      });
       return next;
     });
   }
@@ -205,6 +209,8 @@ export function MapExplorer({
     setFocus(clampMapFocus(defaultFocus.x, defaultFocus.y, 1));
     setActiveCitySlug(null);
   }
+
+  const zoomLabel = `${zoom.toFixed(1)}×`;
 
   return (
     <div className="space-y-5">
@@ -234,11 +240,11 @@ export function MapExplorer({
       <div className="flex flex-wrap items-center justify-between gap-3">
         <MapLegend />
         <p className="font-mono-meta text-[10px] uppercase text-ink/45">
-          Перетягніть · щипок · {zoom.toFixed(1)}×
+          Перетягніть · щипок · {zoomLabel}
         </p>
       </div>
 
-      <div className="relative mx-auto w-full max-w-[820px] overflow-hidden rounded-card border border-line bg-surface p-2 shadow-soft sm:p-3">
+      <div className="relative mx-auto w-full max-w-[820px] overflow-hidden rounded-card border border-line bg-canvas shadow-soft">
         <div className="absolute right-3 top-3 z-10 flex gap-1">
           <Button
             type="button"
@@ -266,15 +272,15 @@ export function MapExplorer({
             type="button"
             variant="ghost"
             size="sm"
-            aria-label="Скинути масштаб"
-            className="min-h-10 px-3"
+            aria-label={`Поточний масштаб ${zoomLabel}. Натисніть, щоб скинути до 1×`}
+            className="min-h-10 min-w-14 px-2 tabular-nums"
             onClick={resetCamera}
           >
-            1×
+            {zoomLabel}
           </Button>
         </div>
 
-        <div className="aspect-[1000/680] max-h-[min(52vh,460px)] w-full touch-none">
+        <div className="aspect-[1000/680] w-full touch-none">
           <UkraineMapSvg
             clusters={clusters}
             logoSlugs={logoSet}

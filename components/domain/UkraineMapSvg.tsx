@@ -261,10 +261,6 @@ export function UkraineMapSvg({
             floodColor="rgba(20,22,22,0.08)"
           />
         </filter>
-        <linearGradient id="map-sea" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="color-mix(in srgb, var(--sky) 55%, white)" />
-          <stop offset="100%" stopColor="color-mix(in srgb, var(--mint) 35%, white)" />
-        </linearGradient>
         <clipPath id="logo-clip-sm">
           <circle cx="0" cy="0" r="4" />
         </clipPath>
@@ -281,7 +277,7 @@ export function UkraineMapSvg({
         y={vbY - 40}
         width={vbW + 80}
         height={vbH + 80}
-        fill="url(#map-sea)"
+        fill="var(--canvas)"
       />
 
       <g filter="url(#map-soft)">
