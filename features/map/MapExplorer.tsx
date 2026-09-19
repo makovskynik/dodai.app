@@ -181,9 +181,7 @@ export function MapExplorer({
   function adjustZoom(delta: number) {
     setZoom((current) => {
       const next = clampZoom(current + delta);
-      queuePromise.resolve().then(() => {
-        setFocus((point) => clampMapFocus(point.x, point.y, next));
-      });
+      setFocus((point) => clampMapFocus(point.x, point.y, next));
       return next;
     });
   }
@@ -191,9 +189,7 @@ export function MapExplorer({
   function zoomByFactor(factor: number) {
     setZoom((current) => {
       const next = clampZoom(current * factor);
-      queuePromise.resolve().then(() => {
-        setFocus((point) => clampMapFocus(point.x, point.y, next));
-      });
+      setFocus((point) => clampMapFocus(point.x, point.y, next));
       return next;
     });
   }
