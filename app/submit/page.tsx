@@ -22,7 +22,7 @@ export default function SubmitPage() {
           Додати продукт
         </h1>
         <p className="mt-3 text-ink/70">
-          Почніть з URL. Безкоштовна картка або Passport за 300 грн. Спонсор і
+          Почніть з URL. Безкоштовна картка або повна картка за 300 грн. Спонсор і
           мапа — окремо (/pricing).
         </p>
       </header>

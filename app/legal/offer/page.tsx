@@ -5,7 +5,7 @@ import { buildPageMetadata } from "@/lib/seo/metadata";
 export const metadata: Metadata = buildPageMetadata({
   title: "Публічна оферта",
   description:
-    "Безкоштовна картка або Passport 300 грн, модерація, голоси та спонсоровані місця на dodai.app.",
+    "Безкоштовна картка або повна картка 300 грн, модерація, голоси та спонсоровані місця на dodai.app.",
   path: "/legal/offer",
 });
 
@@ -36,12 +36,12 @@ export default function OfferPage() {
               символів, схожі проєкти.
             </li>
             <li>
-              Passport (повна картка): 300 грн разово — текст до 1000 символів, до
-              5 лінків, хто створив + LinkedIn, промо, власні пов’язані проєкти.
+              Повна картка: 300 грн разово — текст до 1000 символів, до 5 лінків,
+              хто створив + LinkedIn, промо, власні пов’язані проєкти.
             </li>
             <li>
-              Публікація — лише після схвалення модерацією. Passport оплачується
-              до модерації; безкоштовна картка — без оплати.
+              Публікація — лише після схвалення модерацією. Повна картка
+              оплачується до модерації; безкоштовна картка — без оплати.
             </li>
             <li>
               Оплата не змінює органічні голоси, органічний рейтинг і не купує
@@ -65,11 +65,11 @@ export default function OfferPage() {
         <section>
           <h2 className="text-xl font-semibold text-ink">4. Посилання</h2>
           <p className="mt-2">
-            Платні outbound-посилання мають атрибути{" "}
+            Платні зовнішні посилання мають атрибути{" "}
             <code className="font-mono-meta text-[12px]">
               rel=&quot;sponsored nofollow noopener&quot;
             </code>
-            . Dofollow не продається.
+            . SEO-вагу лінків (dofollow) не продаємо.
           </p>
         </section>
 

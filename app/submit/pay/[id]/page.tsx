@@ -14,7 +14,7 @@ export const metadata: Metadata = buildPageMetadata({
   title: "Підтвердження заявки",
   path: "/submit/pay",
   noIndex: true,
-  description: "Безкоштовна картка або Passport 300 грн на dodai.app",
+  description: "Безкоштовна картка або повна картка 300 грн на dodai.app",
 });
 
 export default async function SubmitPayPage({ params, searchParams }: PageProps) {

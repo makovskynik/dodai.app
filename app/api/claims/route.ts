@@ -28,7 +28,7 @@ export async function POST(request: Request) {
     }
     if (!product.claimable) {
       return NextResponse.json(
-        { error: "Ця картка не відкрита для claim" },
+        { error: "Цю картку зараз не можна підтвердити як свою" },
         { status: 400 },
       );
     }
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     const message =
-      error instanceof Error ? error.message : "Не вдалося зберегти claim";
+      error instanceof Error ? error.message : "Не вдалося зберегти заявку";
     return NextResponse.json({ error: message }, { status: 400 });
   }
 }

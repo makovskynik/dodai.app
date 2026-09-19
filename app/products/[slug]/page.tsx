@@ -132,7 +132,7 @@ export default async function ProductPage({ params }: PageProps) {
         />
         {product.badge === "product-of-the-day" ? <ProductDayBadge /> : null}
         {product.badge === "promoted" ? <PlacementBadge /> : null}
-        {isPassport ? <Badge tone="editorial">Passport</Badge> : null}
+        {isPassport ? <Badge tone="editorial">Повна картка</Badge> : null}
         {product.sourceType === "editorial" ? (
           <Badge>Додано редакцією</Badge>
         ) : null}

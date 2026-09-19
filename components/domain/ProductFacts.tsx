@@ -41,7 +41,7 @@ export function ProductFacts({ product }: ProductFactsProps) {
       value: product.ukraineNote?.trim()
         ? product.ukraineNote
         : product.claimable
-          ? "Не вказано. Власник може доповнити після claim."
+          ? "Не вказано. Власник може доповнити після підтвердження власності."
           : "Не вказано",
     },
     {

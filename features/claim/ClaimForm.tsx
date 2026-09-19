@@ -40,8 +40,8 @@ export function ClaimForm({ productSlug, productName }: ClaimFormProps) {
   if (done) {
     return (
       <p className="rounded-card border border-line bg-mint/50 px-4 py-3 text-sm text-ink/80">
-        Заявку на claim «{productName}» прийнято. Редакція перевірить звʼязок з
-        продуктом і дату верифікації.
+        Заявку щодо «{productName}» прийнято. Редакція перевірить звʼязок з
+        продуктом і поставить дату підтвердження.
       </p>
     );
   }
@@ -51,10 +51,10 @@ export function ClaimForm({ productSlug, productName }: ClaimFormProps) {
       onSubmit={onSubmit}
       className="space-y-4 rounded-card border border-line bg-surface p-5 shadow-soft"
     >
-      <h2 className="text-lg font-semibold">Claim картки</h2>
+      <h2 className="text-lg font-semibold">Це ваш продукт?</h2>
       <p className="text-sm text-ink/70">
         Картку додано редакцією. Підтвердіть, що ви власник або представник
-        команди — після перевірки зʼявиться дата верифікації.
+        команди — після перевірки зʼявиться дата підтвердження фактів.
       </p>
       <FormField label="Email власника" htmlFor="claim-email">
         <Input
@@ -85,7 +85,7 @@ export function ClaimForm({ productSlug, productName }: ClaimFormProps) {
         </p>
       ) : null}
       <Button type="submit" loading={isPending}>
-        Надіслати claim
+        Підтвердити власність
       </Button>
     </form>
   );

@@ -19,7 +19,7 @@ import { getPlacementInventory } from "@/server/placements/queries";
 export const metadata: Metadata = buildPageMetadata({
   title: "Тарифи розміщення",
   description:
-    "Безкоштовна картка або Passport за 300 грн. Спонсорські місця окремо. Органіка, голоси й dofollow не продаються.",
+    "Безкоштовна картка або повна картка за 300 грн. Спонсорські місця окремо. Органіка, голоси й SEO-вагу лінків не продаємо.",
   path: "/pricing",
 });
 
@@ -47,16 +47,16 @@ export default async function PricingPage() {
           Тарифи
         </h1>
         <p className="mt-4 text-[15px] leading-relaxed text-ink/70 sm:text-base">
-          Безкоштовна картка або повний Passport. Платите за глибшу інформацію —
-          не за місце в органіці і не за dofollow.
+          Безкоштовна картка або повна картка. Платите за глибшу інформацію — не
+          за місце в органіці і не за SEO-вагу лінків.
         </p>
         {PRICING_STATUS === "proposed" ? (
           <p
             className="mt-5 rounded-card border border-warning/30 bg-peach px-4 py-3 text-sm text-ink"
             role="status"
           >
-            Модель v3: free vs Passport 300 грн разово. Спонсорські слоти —
-            founding-ціни окремо.
+            Модель v3: безкоштовна або повна картка за 300 грн разово.
+            Спонсорські слоти — стартові ціни окремо.
           </p>
         ) : null}
       </header>
@@ -104,7 +104,7 @@ export default async function PricingPage() {
           <p className="mt-3 text-sm text-ink/55">{PASSPORT_LISTING_SKU.noteUk}</p>
           <div className="mt-6">
             <LinkButton href="/submit" size="sm">
-              Passport · 300 грн
+              Повна картка · 300 грн
             </LinkButton>
           </div>
         </article>
@@ -119,7 +119,7 @@ export default async function PricingPage() {
         </h2>
         <p className="mt-2 max-w-2xl text-sm text-ink/65">
           На мапі три рівні: малий логотип (безкоштовно), середній і великий —
-          платні слоти з лімітом. Founding-ціни.
+          платні слоти з лімітом. Стартові ціни.
         </p>
         <div className="mt-6 overflow-x-auto rounded-card border border-line bg-surface">
           <table className="w-full min-w-[720px] text-left text-sm">

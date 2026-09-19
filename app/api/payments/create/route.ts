@@ -79,7 +79,7 @@ export async function POST(request: Request) {
       referenceId: submission.id,
       description:
         tier === "passport"
-          ? `dodai.app — Passport картка (${submission.name})`
+          ? `dodai.app — повна картка (${submission.name})`
           : `dodai.app — базове розміщення (${submission.name})`,
       customerEmail: submission.ownerEmail,
       idempotencyKey,

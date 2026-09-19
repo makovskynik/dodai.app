@@ -95,14 +95,14 @@ export const submissionSchema = z
       if (body.length < 40) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Для Passport потрібен текст від 40 символів (до 1000)",
+          message: "Для повної картки потрібен текст від 40 символів (до 1000)",
           path: ["description"],
         });
       }
       if (body.length > PASSPORT_BODY_MAX) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: `Текст Passport — до ${PASSPORT_BODY_MAX} символів`,
+          message: `Текст повної картки — до ${PASSPORT_BODY_MAX} символів`,
           path: ["description"],
         });
       }

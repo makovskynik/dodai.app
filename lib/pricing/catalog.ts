@@ -57,12 +57,12 @@ export const BASE_LISTING_SKU = {
     "Автопідбір схожих проєктів внизу",
   ],
   rationaleUk:
-    "Вхід без бар’єра — каталог росте. Гроші лише за глибшу картку, не за органічний рейтинг і не за dofollow.",
+    "Вхід без бар’єра — каталог росте. Гроші лише за глибшу картку, не за органічний рейтинг і не за SEO-вагу лінків.",
 } as const;
 
 export const PASSPORT_LISTING_SKU = {
   id: "passport_listing",
-  nameUk: "Повна картка (Passport)",
+  nameUk: "Повна картка",
   summaryUk:
     "Розширений паспорт продукту: довгий текст, до 5 лінків, хто створив, промо, власні пов’язані проєкти. Разова оплата.",
   priceUah: PASSPORT_LISTING_PRICE_UAH,
@@ -76,7 +76,7 @@ export const PASSPORT_LISTING_SKU = {
     "Спочатку ваші пов’язані проєкти, нижче — схожі",
   ],
   noteUk:
-    "Усі outbound-лінки лишаються sponsored/nofollow. Passport не купує місце в органіці й не дає dofollow.",
+    "Усі зовнішні лінки без передачі SEO-ваги (sponsored / nofollow). Повна картка не купує місце в органіці.",
 } as const;
 
 /**
@@ -90,7 +90,7 @@ export const PLACEMENT_SKUS: PlacementSku[] = [
     nameUk: "Спонсор на головній",
     summaryUk: "Блок «Спонсоровані» — рівні картки, без рангу якості.",
     rankingRuleUk: "До 3 рівних місць. Порядок — за стартом слота (FIFO).",
-    inventoryNoteUk: "До 3 · рівні · founding",
+    inventoryNoteUk: "До 3 · рівні · старт",
     maxConcurrent: 3,
     pricesUah: { 30: 1990 },
   },
@@ -100,7 +100,7 @@ export const PLACEMENT_SKUS: PlacementSku[] = [
     nameUk: "Спонсор категорії (ексклюзив)",
     summaryUk: "Єдиний спонсор категорії на період.",
     rankingRuleUk: "Строго 1 місце на категорію.",
-    inventoryNoteUk: "1 / категорія · founding",
+    inventoryNoteUk: "1 / категорія · старт",
     maxConcurrent: 1,
     pricesUah: { 30: 1290 },
   },
@@ -112,7 +112,7 @@ export const PLACEMENT_SKUS: PlacementSku[] = [
       "Замість точки — ваш логотип середнього розміру. Усі маркери рівня 2 однакові.",
     rankingRuleUk:
       "До 25 одночасних слотів. Базовий рівень — малий логотип (безкоштовно). Рівень 3 — окремий тариф.",
-    inventoryNoteUk: "лого · до 25 · founding",
+    inventoryNoteUk: "лого · до 25 · старт",
     maxConcurrent: 25,
     pricesUah: { 30: 490 },
   },
@@ -124,7 +124,7 @@ export const PLACEMENT_SKUS: PlacementSku[] = [
       "Найбільший маркер (≈×3). Усі рівні 3 однакові — без pay-more → ще більший.",
     rankingRuleUk:
       "До 5 одночасних слотів. Не змішується з органічним сортуванням каталогу.",
-    inventoryNoteUk: "великий лого · до 5 · founding",
+    inventoryNoteUk: "великий лого · до 5 · старт",
     maxConcurrent: 5,
     pricesUah: { 30: 990 },
   },
@@ -140,16 +140,16 @@ export const BUNDLE_SKUS: BundleSku[] = [
   },
   {
     id: "bundle_passport",
-    nameUk: "Passport",
+    nameUk: "Повна картка",
     summaryUk: "Повна картка разово.",
-    includesUk: ["Повна картка Passport"],
+    includesUk: ["Повна картка"],
     priceUah: PASSPORT_LISTING_PRICE_UAH,
   },
   {
     id: "bundle_niche",
     nameUk: "Ніша",
-    summaryUk: "Passport + ексклюзив категорії на 30 днів.",
-    includesUk: ["Passport · 300 грн", "Спонсор категорії · 30 днів"],
+    summaryUk: "Повна картка + ексклюзив категорії на 30 днів.",
+    includesUk: ["Повна картка · 300 грн", "Спонсор категорії · 30 днів"],
     priceUah: PASSPORT_LISTING_PRICE_UAH + 1290,
   },
 ];
@@ -157,15 +157,15 @@ export const BUNDLE_SKUS: BundleSku[] = [
 export const SERVICE_SKUS: ServiceSku[] = [
   {
     id: "claim",
-    nameUk: "Claim редакційної картки",
-    summaryUk: "Запит на володіння карткою. Модерація обов’язкова.",
+    nameUk: "Підтвердження власності картки",
+    summaryUk: "Запит від редакційної картки. Модерація обов’язкова.",
     priceUah: 0,
     priceLabelUk: "0 грн",
     status: "available",
   },
   {
     id: "verified",
-    nameUk: "Verified-перевірка",
+    nameUk: "Перевірка команди",
     summaryUk: "Окрема перевірка команди / зв’язку з Україною.",
     priceUah: 500,
     priceLabelUk: "500 грн",
@@ -191,8 +191,8 @@ export const NOT_FOR_SALE = [
   },
   {
     id: "dofollow",
-    nameUk: "Dofollow-посилання",
-    reasonUk: "Усі платні й безкоштовні outbound — sponsored/nofollow.",
+    nameUk: "SEO-вага зовнішніх лінків",
+    reasonUk: "Усі зовнішні лінки — без передачі SEO-ваги (sponsored / nofollow).",
   },
 ] as const;
 

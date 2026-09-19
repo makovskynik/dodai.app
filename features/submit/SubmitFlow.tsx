@@ -330,7 +330,7 @@ export function SubmitFlow() {
                     : "border-line bg-canvas text-ink hover:bg-copper-soft"
                 }`}
               >
-                <span className="block font-semibold">Passport</span>
+                <span className="block font-semibold">Повна картка</span>
                 <span className="mt-1 block text-sm opacity-80">
                   До 1000 символів, до 5 лінків, хто створив, промо, свої
                   пов’язані проєкти.
@@ -341,8 +341,8 @@ export function SubmitFlow() {
               </button>
             </div>
             <p className="text-sm text-ink/55">
-              Лінки завжди sponsored/nofollow. Passport не купує органічний
-              рейтинг.
+              Зовнішні лінки без передачі SEO-ваги. Повна картка не купує
+              органічний рейтинг.
             </p>
           </div>
 
@@ -370,7 +370,7 @@ export function SubmitFlow() {
               </FormField>
               {form.listingTier === "passport" ? (
                 <FormField
-                  label="Повний текст (Passport)"
+                  label="Повний текст"
                   htmlFor="description"
                   hint={`${form.description.length}/1000`}
                 >
@@ -513,7 +513,7 @@ export function SubmitFlow() {
             {form.listingTier === "passport" ? (
               <div className="space-y-5 rounded-card border border-line bg-canvas p-4">
                 <p className="text-sm font-medium text-ink">
-                  Passport · додаткові поля
+                  Повна картка · додаткові поля
                 </p>
                 <FormField label="Хто створив" htmlFor="creatorName">
                   <Input
@@ -657,7 +657,7 @@ export function SubmitFlow() {
             </div>
             <p className="text-sm text-ink/60">
               {form.listingTier === "passport"
-                ? `Passport — ${formatUah(PASSPORT_LISTING_PRICE_UAH)} разово, далі модерація.`
+                ? `Повна картка — ${formatUah(PASSPORT_LISTING_PRICE_UAH)} разово, далі модерація.`
                 : "Безкоштовна картка — після заявки модерація без оплати."}{" "}
               Спонсорські місця окремо: /pricing.
             </p>
@@ -673,7 +673,7 @@ export function SubmitFlow() {
           </p>
           <p className="mt-3 text-ink/75">
             {form.listingTier === "passport"
-              ? `Далі — оплата Passport ${formatUah(PASSPORT_LISTING_PRICE_UAH)}, потім модерація.`
+              ? `Далі — оплата повної картки ${formatUah(PASSPORT_LISTING_PRICE_UAH)}, потім модерація.`
               : "База безкоштовна. Підтвердіть заявку — вона потрапить у чергу модерації."}
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
@@ -683,7 +683,7 @@ export function SubmitFlow() {
                 className="inline-flex min-h-11 items-center justify-center rounded-pill bg-copper px-5 text-sm font-medium text-surface hover:bg-copper-dark"
               >
                 {form.listingTier === "passport"
-                  ? "Оплатити Passport"
+                  ? "Оплатити повну картку"
                   : "До модерації"}
               </Link>
             ) : null}

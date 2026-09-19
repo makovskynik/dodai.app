@@ -87,12 +87,12 @@ export function SubmitPayClient({
   return (
     <div className="rounded-card border border-line bg-surface p-6 shadow-soft">
       <h2 className="text-2xl font-semibold">
-        {isPassport ? "Оплата Passport" : "Підтвердити заявку"}
+        {isPassport ? "Оплата повної картки" : "Підтвердити заявку"}
       </h2>
       <p className="mt-3 text-ink/75">
         <strong>{name}</strong> —{" "}
         {isPassport
-          ? `повна картка Passport · ${amountLabel} разово.`
+          ? `повна картка · ${amountLabel} разово.`
           : "безкоштовна картка · 0 грн."}{" "}
         Далі — модерація. Спонсорські місця окремо на /pricing.
       </p>
