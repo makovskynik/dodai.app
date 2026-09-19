@@ -11,6 +11,9 @@ export function SiteFooter() {
             Каталог українських цифрових продуктів. Знайди сервіс під задачу або
             додай свій.
           </p>
+          <p className="font-mono-meta text-[10px] uppercase tracking-[0.04em] text-ink/45">
+            © 2024–2026 dodai.app
+          </p>
         </div>
         <nav aria-label="Юридичні посилання" className="space-y-2">
           <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-ink/70">
