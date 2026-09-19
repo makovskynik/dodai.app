@@ -17,8 +17,15 @@ export const MAP_TIER_RADIUS: Record<MapMarkerTier, number> = {
   3: 42,
 };
 
+/** Half-size of the logo image inside the circle. */
+export const MAP_TIER_LOGO_HALF: Record<MapMarkerTier, number> = {
+  1: 4,
+  2: 10,
+  3: 32,
+};
+
 export const MAP_TIER_LABEL_UK: Record<MapMarkerTier, string> = {
-  1: "Точка",
+  1: "Малий логотип",
   2: "Логотип",
   3: "Великий логотип",
 };

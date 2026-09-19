@@ -5,12 +5,12 @@ export function MapLegend() {
     <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-ink/70">
       <li className="flex items-center gap-2">
         <span
-          className="inline-flex h-9 w-9 items-center justify-center"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-copper bg-surface"
           aria-hidden
         >
-          <span className="h-2.5 w-2.5 rounded-full bg-copper" />
+          <span className="h-2.5 w-2.5 rounded-full bg-canvas" />
         </span>
-        <span>Рівень 1 · точка (безкоштовно)</span>
+        <span>Рівень 1 · малий лого (безкоштовно)</span>
       </li>
       <li className="flex items-center gap-2">
         <span

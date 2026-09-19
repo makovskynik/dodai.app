@@ -9,6 +9,7 @@ import type { MapCluster } from "@/lib/map/cluster";
 import { cityByOblastId } from "@/lib/map/cities";
 import type { CatalogProduct } from "@/lib/catalog/types";
 import {
+  MAP_TIER_LOGO_HALF,
   MAP_TIER_RADIUS,
   resolveMapMarkerTier,
   type MapMarkerTier,
@@ -264,6 +265,9 @@ export function UkraineMapSvg({
           <stop offset="0%" stopColor="color-mix(in srgb, var(--sky) 55%, white)" />
           <stop offset="100%" stopColor="color-mix(in srgb, var(--mint) 35%, white)" />
         </linearGradient>
+        <clipPath id="logo-clip-sm">
+          <circle cx="0" cy="0" r="4" />
+        </clipPath>
         <clipPath id="logo-clip">
           <circle cx="0" cy="0" r="14" />
         </clipPath>
@@ -381,8 +385,14 @@ export function UkraineMapSvg({
               const x = cluster.city.x + dx;
               const y = cluster.city.y + dy;
               const r = MAP_TIER_RADIUS[tier];
-              const logoHalf = tier === 3 ? 32 : tier === 2 ? 10 : 0;
-              const fontSize = tier === 3 ? 16 : 8;
+              const logoHalf = MAP_TIER_LOGO_HALF[tier];
+              const fontSize = tier === 3 ? 16 : tier === 2 ? 8 : 5;
+              const clip =
+                tier === 3
+                  ? "url(#logo-clip-lg)"
+                  : tier === 2
+                    ? "url(#logo-clip)"
+                    : "url(#logo-clip-sm)";
 
               return (
                 <g
@@ -393,7 +403,7 @@ export function UkraineMapSvg({
                   tabIndex={0}
                   aria-label={
                     tier === 1
-                      ? `${product.name}, точка на мапі`
+                      ? `${product.name}, малий логотип на мапі`
                       : tier === 2
                         ? `${product.name}, логотип на мапі`
                         : `${product.name}, великий логотип на мапі`
@@ -410,49 +420,34 @@ export function UkraineMapSvg({
                     }
                   }}
                 >
-                  {tier === 1 ? (
-                    <circle
-                      r={r}
-                      fill="var(--copper)"
-                      stroke="var(--surface)"
-                      strokeWidth="1.25"
+                  <circle
+                    r={r}
+                    fill="var(--surface)"
+                    stroke={tier === 1 ? "var(--copper)" : "var(--ink)"}
+                    strokeOpacity={tier === 3 ? 0.28 : tier === 2 ? 0.16 : 0.9}
+                    strokeWidth={tier === 3 ? 2 : tier === 1 ? 1 : 1.25}
+                  />
+                  {product.logoUrl ? (
+                    <image
+                      href={product.logoUrl}
+                      x={-logoHalf}
+                      y={-logoHalf}
+                      width={logoHalf * 2}
+                      height={logoHalf * 2}
+                      clipPath={clip}
+                      preserveAspectRatio="xMidYMid meet"
                     />
                   ) : (
-                    <>
-                      <circle
-                        r={r}
-                        fill="var(--surface)"
-                        stroke="var(--ink)"
-                        strokeOpacity={tier === 3 ? 0.28 : 0.16}
-                        strokeWidth={tier === 3 ? 2 : 1.25}
-                      />
-                      {product.logoUrl ? (
-                        <image
-                          href={product.logoUrl}
-                          x={-logoHalf}
-                          y={-logoHalf}
-                          width={logoHalf * 2}
-                          height={logoHalf * 2}
-                          clipPath={
-                            tier === 3
-                              ? "url(#logo-clip-lg)"
-                              : "url(#logo-clip)"
-                          }
-                          preserveAspectRatio="xMidYMid meet"
-                        />
-                      ) : (
-                        <text
-                          textAnchor="middle"
-                          dominantBaseline="central"
-                          fill="var(--ink)"
-                          fontSize={fontSize}
-                          fontFamily="Geologica, sans-serif"
-                          fontWeight="600"
-                        >
-                          {product.initials}
-                        </text>
-                      )}
-                    </>
+                    <text
+                      textAnchor="middle"
+                      dominantBaseline="central"
+                      fill={tier === 1 ? "var(--copper)" : "var(--ink)"}
+                      fontSize={fontSize}
+                      fontFamily="Geologica, sans-serif"
+                      fontWeight="600"
+                    >
+                      {product.initials}
+                    </text>
                   )}
                   <title>
                     {`${product.name}${

@@ -219,7 +219,7 @@ Rules:
 - The map is an exploration layer, not the primary ranking.
 - Use clusters at scale; do not render hundreds of overlapping markers.
 - Map markers use compact `d+` for dodai context and product initials/logo for products.
-- Never make marker size depend on payment *amount* (no pay-more → continuously bigger). Map uses three discrete tiers: (1) free copper dot, (2) paid mid logo up to 25 concurrent, (3) paid large logo up to 5 concurrent. Size tiers by arbitrary spend beyond these SKUs are forbidden.
+- Never make marker size depend on payment *amount* (no pay-more → continuously bigger). Map uses three discrete tiers: (1) free small logo at dot size, (2) paid mid logo up to 25 concurrent, (3) paid large logo up to 5 concurrent. Size tiers by arbitrary spend beyond these SKUs are forbidden.
 - The map must have a list or accessible alternative view.
 
 ## 8. Add-product flow

@@ -118,7 +118,7 @@ export default async function PricingPage() {
           Спонсорські місця (окремо)
         </h2>
         <p className="mt-2 max-w-2xl text-sm text-ink/65">
-          На мапі три рівні: точка (безкоштовно), логотип і великий логотип —
+          На мапі три рівні: малий логотип (безкоштовно), середній і великий —
           платні слоти з лімітом. Founding-ціни.
         </p>
         <div className="mt-6 overflow-x-auto rounded-card border border-line bg-surface">
