@@ -40,7 +40,7 @@ export type ServiceSku = {
 };
 
 export const PRICING_VERSION = "2026-09-v3";
-export const PRICING_STATUS: "proposed" = "proposed";
+export const PRICING_STATUS = "proposed" as const;
 
 export const BASE_LISTING_SKU = {
   id: "base_listing",
